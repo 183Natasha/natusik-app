@@ -29,11 +29,14 @@ function formIsValid(){
     errors.value.name = null
   }
 
-  if (typeof(drugMass.value)==='string'){
-    errors.value.drugMass = 'Введите массу цифрой'
-    isValid=false
-  } else{
-    errors.value.drugMass = null
+   if (isNaN(drugMass.value) || drugMass.value === '') {
+    errors.value.drugMass = 'Введите корректное число';
+    isValid = false;
+  } else if (Number(drugMass.value) <= 0) {
+    errors.value.drugMass = 'Дозировка должна быть больше 0';
+    isValid = false;
+  } else {
+    errors.value.drugMass = null;
   }
 
   return isValid
