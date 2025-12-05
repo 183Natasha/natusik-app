@@ -16,26 +16,51 @@ const drugMass = ref("");
 const effect = ref("");
 const where = ref([]);
 const type = ref([]);
+const errors = ref({
+  name: null
+})
+
+function formIsValid(){
+  let isValid= true
+  if (name.value.length===0){
+    errors.value.name = 'Введите ваше имя'
+    isValid=false
+  } else{
+    errors.value.name = null
+  }
+
+  if (typeof(drugMass.value)==='string'){
+    errors.value.drugMass = 'Введите массу цифрой'
+    isValid=false
+  } else{
+    errors.value.drugMass = null
+  }
+
+  return isValid
+};
+
 
 function submitForm() {
-  console.group("Form Data");
-  console.log("Name:", name.value);
-  console.log("Date:", date.value);
-  console.log("Where:", where.value);
-  console.log("Type:", type.value);
-  console.log("strong:", strong.value);
-  console.log("headacheCheck:", headacheCheck.value);
-  console.log("headacheAura:", headacheAura.value);
-  console.log("Sport:", sport.value);
-  console.log("Nausea:", nausea.value);
-  console.log("Puke:", puke.value);
-  console.log("Light:", light.value);
-  console.log("Sound:", sound.value);
-  console.log("drugName:", drugName.value);
-  console.log("drugMass:", drugMass.value);
-  console.log("effect:", effect.value);
+  if (formIsValid()) {
+    console.group("Form Data");
+    console.log("Name:", name.value);
+    console.log("Date:", date.value);
+    console.log("Where:", where.value);
+    console.log("Type:", type.value);
+    console.log("strong:", strong.value);
+    console.log("headacheCheck:", headacheCheck.value);
+    console.log("headacheAura:", headacheAura.value);
+    console.log("Sport:", sport.value);
+    console.log("Nausea:", nausea.value);
+    console.log("Puke:", puke.value);
+    console.log("Light:", light.value);
+    console.log("Sound:", sound.value);
+    console.log("drugName:", drugName.value);
+    console.log("drugMass:", drugMass.value);
+    console.log("effect:", effect.value);
 
-  console.groupEnd();
+    console.groupEnd();
+  }
 }
 
 // const questionList = ref([
@@ -80,7 +105,7 @@ function submitForm() {
       <h2>Список вопросов</h2>
       <ol>
         <li>
-          <div class="form-name">
+          <div class="form-control" :class="{inValid : errors.name }">
             <label for="name">Как тебя зовут?</label>
             <input
               type="text"
@@ -88,6 +113,7 @@ function submitForm() {
               placeholder="Введите имя"
               v-model.trim="name"
             />
+            <small v-if="errors.name">{{ errors.name }}</small>
           </div>
         </li>
         <li>
@@ -150,23 +176,45 @@ function submitForm() {
             <label>Где отмечалась головная боль?</label>
 
             <label for="one"
-              ><input type="checkbox" name="headacheWhere" v-model="where" value="one"/>C одной
-              стороны</label
+              ><input
+                type="checkbox"
+                name="headacheWhere"
+                v-model="where"
+                value="one"
+              />C одной стороны</label
             >
 
             <label for="two"
-              ><input type="checkbox" name="headacheWhere" v-model="where" value="two"/>С обеих
-              сторон</label
+              ><input
+                type="checkbox"
+                name="headacheWhere"
+                v-model="where"
+                value="two"
+              />С обеих сторон</label
             >
           </div>
         </li>
         <li>
           <div class="form-control">
             <label>Характер ГБ</label>
-            
-            <label for="pressing"><input type="checkbox" name="headacheType" v-model="type" value="press"/>Давящая</label>
-            
-            <label for="pulse"><input type="checkbox" name="headacheType" v-model="type" value="puls"/>Пульсирующая</label>
+
+            <label for="pressing"
+              ><input
+                type="checkbox"
+                name="headacheType"
+                v-model="type"
+                value="press"
+              />Давящая</label
+            >
+
+            <label for="pulse"
+              ><input
+                type="checkbox"
+                name="headacheType"
+                v-model="type"
+                value="puls"
+              />Пульсирующая</label
+            >
           </div>
         </li>
         <li>
@@ -268,7 +316,7 @@ function submitForm() {
           </div>
         </li>
         <li>
-          <div class="form-control">
+          <div class="form-control" >
             <div>
               <div class="form-drug">
                 <div>
@@ -280,7 +328,7 @@ function submitForm() {
                     v-model.trim="drugName"
                   />
                 </div>
-                <div>
+                <div class="form-control" :class="{inValid : errors.drugMass }">
                   <label for="drug-mass"> Какая дозировка (мг) ?</label>
                   <input
                     type="text"
@@ -288,6 +336,7 @@ function submitForm() {
                     placeholder="Введите дозировку препарата"
                     v-model.number="drugMass"
                   />
+                  <small v-if="errors.drugMass">{{ errors.drugMass }}</small>
                 </div>
                 <div>
                   <label>Эффект от приема препарата был?</label>
@@ -320,7 +369,10 @@ function submitForm() {
 </template>
 
 <style scoped>
-/* .form-control {
-
-} */
+.form-control small{
+  color: red
+}
+.form-control.inValid input{
+  border-color: red
+}
 </style>
