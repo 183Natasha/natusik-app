@@ -1,9 +1,43 @@
 <script setup>
 import { ref } from "vue";
 
+const name = ref("");
+const date = ref("");
+const strong = ref("");
+const headacheCheck = ref("null");
+const headacheAura = ref("null");
+const sport = ref("null");
+const nausea = ref("null");
+const puke = ref("null");
+const light = ref("null");
+const sound = ref("null");
+const drugName = ref("");
+const drugMass = ref("");
+const effect = ref("");
+const where = ref([]);
+const type = ref([]);
+
 function submitForm() {
-  console.log("submit");
+  console.group("Form Data");
+  console.log("Name:", name.value);
+  console.log("Date:", date.value);
+  console.log("Where:", where.value);
+  console.log("Type:", type.value);
+  console.log("strong:", strong.value);
+  console.log("headacheCheck:", headacheCheck.value);
+  console.log("headacheAura:", headacheAura.value);
+  console.log("Sport:", sport.value);
+  console.log("Nausea:", nausea.value);
+  console.log("Puke:", puke.value);
+  console.log("Light:", light.value);
+  console.log("Sound:", sound.value);
+  console.log("drugName:", drugName.value);
+  console.log("drugMass:", drugMass.value);
+  console.log("effect:", effect.value);
+
+  console.groupEnd();
 }
+
 // const questionList = ref([
 //   { id: 1,
 //     text: "Сегодняшняя дата" },
@@ -46,60 +80,102 @@ function submitForm() {
       <h2>Список вопросов</h2>
       <ol>
         <li>
+          <div class="form-name">
+            <label for="name">Как тебя зовут?</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Введите имя"
+              v-model.trim="name"
+            />
+          </div>
+        </li>
+        <li>
           <div class="form-control">
             <label for="date">Текущая дата</label>
-            <input type="date" name="calendar" />
+            <input type="date" id="date" name="calendar" v-model="date" />
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Была ли у Вас сегодня головная боль (ГБ)?</div>
-            <input type="radio" name="headacheCheck" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headacheCheck" />
-            <label for="no">Нет</label>
+            <label>Была ли у Вас сегодня головная боль (ГБ)?</label>
+            <label for="yes"
+              ><input
+                type="radio"
+                name="headacheCheck"
+                v-model="headacheCheck"
+                value="yes"
+              />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="headacheCheck"
+                v-model="headacheCheck"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>
+            <label>
               В течение часа ДО возникновения головной боли отмечати ли вы
               зрительные нарушения (цветные вспышки, зигзаги, слепые пятна)
               <br />
               или обонятельные ( ощущение посторонних запахов)
-            </div>
-            <input type="radio" name="headacheAura" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headacheAura" />
-            <label for="no">Нет</label>
+            </label>
+            <label for="yes"
+              ><input
+                type="radio"
+                name="headacheAura"
+                v-model="headacheAura"
+                value="yes"
+              />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="headacheAura"
+                v-model="headacheAura"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Где отмечалась головная боль?</div>
-            <input type="checkbox" name="headacheWhere" />
-            <label for="one">C одной стороны</label>
-            <input type="checkbox" name="headacheWhere" />
-            <label for="two">С обеих сторон</label>
+            <label>Где отмечалась головная боль?</label>
+
+            <label for="one"
+              ><input type="checkbox" name="headacheWhere" v-model="where" value="one"/>C одной
+              стороны</label
+            >
+
+            <label for="two"
+              ><input type="checkbox" name="headacheWhere" v-model="where" value="two"/>С обеих
+              сторон</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Характер ГБ</div>
-            <input type="checkbox" name="headacheType" />
-            <label for="pressing">Давящая</label>
-            <input type="checkbox" name="headacheType" />
-            <label for="pulse">Пульсирующая</label>
+            <label>Характер ГБ</label>
+            
+            <label for="pressing"><input type="checkbox" name="headacheType" v-model="type" value="press"/>Давящая</label>
+            
+            <label for="pulse"><input type="checkbox" name="headacheType" v-model="type" value="puls"/>Пульсирующая</label>
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>
+            <label>
               Интенсивность головной боли в баллах (Выберите интенсивность из
               списка)
-            </div>
-            <select id="strong" class="intensity-select">
-              <option selected value="chois">-- Выберите --</option>
+            </label>
+            <select id="strong" class="intensity-select" v-model="strong">
               <option v-for="n in 11" :key="n" :value="n - 1">
                 {{ n - 1 }}
               </option>
@@ -108,53 +184,133 @@ function submitForm() {
         </li>
         <li>
           <div class="form-control">
-            <div>Усиливалась ли при физической нагрузке?</div>
-            <input type="radio" name="headacheSport" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headacheSport" />
-            <label for="no">Нет</label>
+            <label>Усиливалась ли при физической нагрузке?</label>
+            <label for="yes"
+              ><input type="radio" name="sport" v-model="sport" value="yes" />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="sport"
+                v-model="sport"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Сопровождалась ли тошнотой?</div>
-            <input type="radio" name="headacheNausea" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headacheNausea" />
-            <label for="no">Нет</label>
+            <label>Сопровождалась ли тошнотой?</label>
+            <label for="yes"
+              ><input type="radio" name="Nausea" v-model="nausea" value="yes" />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="Nausea"
+                v-model="nausea"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Сопровождалась ли рвотой?</div>
-            <input type="radio" name="headachePuke" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headachePuke" />
-            <label for="no">Нет</label>
+            <label>Сопровождалась ли рвотой?</label>
+            <label for="yes"
+              ><input type="radio" name="Puke" v-model="puke" value="yes" />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="Puke"
+                v-model="puke"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Раздражал ли свет?</div>
-            <input type="radio" name="headacheLight" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headacheLight" />
-            <label for="no">Нет</label>
+            <label>Раздражал ли свет?</label>
+            <label for="yes"
+              ><input type="radio" name="Light" v-model="light" value="yes" />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="Light"
+                v-model="light"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Раздражал ли звук?</div>
-            <input type="radio" name="headacheSound" />
-            <label for="yes">Да</label>
-            <input type="radio" name="headacheSound" />
-            <label for="no">Нет</label>
+            <label>Раздражал ли звук?</label>
+            <label for="yes"
+              ><input type="radio" name="sound" v-model="sound" value="yes" />
+              Да</label
+            >
+            <label for="no"
+              ><input
+                type="radio"
+                name="sound"
+                v-model="sound"
+                value="no"
+              />Нет</label
+            >
           </div>
         </li>
         <li>
           <div class="form-control">
-            <div>Препарат, доза, эффект</div>
-            <input type="text" name="headacheDrug" />
+            <div>
+              <div class="form-drug">
+                <div>
+                  <label for="drug-name"> Какой препарат приняли?</label>
+                  <input
+                    type="text"
+                    id="drug-name"
+                    placeholder="Введите название препарата"
+                    v-model.trim="drugName"
+                  />
+                </div>
+                <div>
+                  <label for="drug-mass"> Какая дозировка (мг) ?</label>
+                  <input
+                    type="text"
+                    id="drug-mass"
+                    placeholder="Введите дозировку препарата"
+                    v-model.number="drugMass"
+                  />
+                </div>
+                <div>
+                  <label>Эффект от приема препарата был?</label>
+                  <label for="yes"
+                    ><input
+                      type="radio"
+                      name="effect"
+                      v-model="effect"
+                      value="yes"
+                    />
+                    Да</label
+                  >
+                  <label for="no"
+                    ><input
+                      type="radio"
+                      name="effect"
+                      v-model="effect"
+                      value="no"
+                    />Нет</label
+                  >
+                </div>
+              </div>
+            </div>
           </div>
         </li>
       </ol>
