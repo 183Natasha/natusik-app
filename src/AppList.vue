@@ -1,117 +1,306 @@
 <script setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 
-const name = ref("");
-const date = ref("");
-const strong = ref("");
-const headacheCheck = ref("null");
-const headacheAura = ref("null");
-const sport = ref("null");
-const nausea = ref("null");
-const puke = ref("null");
-const light = ref("null");
-const sound = ref("null");
-const drugName = ref("");
-const drugMass = ref("");
-const effect = ref("");
-const where = ref([]);
-const type = ref([]);
-const errors = ref({
-  name: null
-})
+const form = reactive({
+  name: "",
+  date: "",
+  intensity: "",
+  headacheToday: "",
+  aura: "",
+  physicalActivity: "",
+  nausea: "",
+  vomiting: "",
+  lightSensitivity: "",
+  soundSensitivity: "",
+  drugName: "",
+  drugMass: "",
+  drugEffect: "",
+  location: [],
+  headacheType: [],
+});
 
-function formIsValid(){
-  let isValid= true
-  if (name.value.length===0){
-    errors.value.name = 'Введите ваше имя'
-    isValid=false
-  } else{
-    errors.value.name = null
+// const name = ref("");
+// const date = ref("");
+// const intensity = ref("");
+// const headacheToday = ref("");
+// const aura = ref("");
+// const physicalActivity = ref("");
+// const nausea = ref("");
+// const vomiting = ref("");
+// const lightSensitivity = ref("");
+// const soundSensitivity = ref("");
+// const drugName = ref("");
+// const drugMass = ref("");
+// const drugEffect = ref("");
+// const location = ref([]);
+// const headacheType = ref([]);
+
+const errors = reactive({
+  name: null,
+  date: null,
+  intensity: null,
+  headacheToday: null,
+  aura: null,
+  physicalActivity: null,
+  nausea: null,
+  vomiting: null,
+  lightSensitivitySensitivity: null,
+  drugName: null,
+  drugMass: null,
+  drugdrugEffect: null,
+  location: null,
+});
+
+function formIsValid() {
+  let isValid = true;
+
+  Object.keys(errors).forEach((key) => (errors[key] = null));
+
+  if (obj.name.value.length === 0) {
+    errors.value.name = "Введите ваше имя";
+    isValid = false;
+  } else {
+    errors.value.name = null;
   }
 
-   if (isNaN(drugMass.value) || drugMass.value === '') {
-    errors.value.drugMass = 'Введите корректное число';
+  if (isNaN(drugMass.value) || drugMass.value === "") {
+    errors.value.drugMass = "Введите корректное число";
     isValid = false;
   } else if (Number(drugMass.value) <= 0) {
-    errors.value.drugMass = 'Дозировка должна быть больше 0';
+    errors.value.drugMass = "Дозировка должна быть больше 0";
     isValid = false;
   } else {
     errors.value.drugMass = null;
   }
 
-  return isValid
-};
-
+  return isValid;
+}
 
 function submitForm() {
   if (formIsValid()) {
-    console.group("Form Data");
-    console.log("Name:", name.value);
-    console.log("Date:", date.value);
-    console.log("Where:", where.value);
-    console.log("Type:", type.value);
-    console.log("strong:", strong.value);
-    console.log("headacheCheck:", headacheCheck.value);
-    console.log("headacheAura:", headacheAura.value);
-    console.log("Sport:", sport.value);
-    console.log("Nausea:", nausea.value);
-    console.log("Puke:", puke.value);
-    console.log("Light:", light.value);
-    console.log("Sound:", sound.value);
-    console.log("drugName:", drugName.value);
-    console.log("drugMass:", drugMass.value);
-    console.log("effect:", effect.value);
+    const formData = {
+      name: name.value,
+      date: date.value,
+      intensity: intensity.value,
+      headacheToday: headacheToday.value,
+      aura: aura.value,
+      location: location.value,
+      headacheType: headacheType.value,
+      physicalActivity: physicalActivity.value,
+      nausea: nausea.value,
+      vomiting: vomiting.value,
+      lightSensitivity: lightSensitivity.value,
+      soundSensitivity: soundSensitivity.value,
+      drugName: drugName.value,
+      drugMass: drugMass.value,
+      drugEffect: drugEffect.value,
+    };
 
-    console.groupEnd();
+    console.log("Form Data:", formData);
   }
 }
 
-// const questionList = ref([
-//   { id: 1,
-//     text: "Сегодняшняя дата" },
-//   { id: 2,
-//     text: "Была ли у Вас сегодня головная боль (ГБ)?" },
-//   {
-//     id: 3,
-//     text: "В течение часа ДО возникновения головной боли отмечати ли вы зрительные нарушения (цветные вспышки, зигзаги, слепые пятна) <br/> или обонятельные ( ощущение посторонних запахов)",
-//   },
-//   { id: 4,
-//     text: "Где отмечалась головная боль" },
-//   { id: 5,
-//     text: "Характер ГБ" },
-//   { id: 6,
-//     text: "Интенсивность головной боли" },
-//   { id: 7,
-//     text: "Усиливалась ли при физической нагрузке" },
-//   { id: 8,
-//     text: "Интенсивность" },
-//   { id: 9,
-//     text: "Сопровождалась ли тошнотой" },
-//   { id: 10,
-//     text: "Сопровождалась ли рвотой" },
-//   { id: 11,
-//     text: "Раздражал ли свет" },
-//   { id: 12,
-//     text: "Раздражал ли звук" },
-//   {
-//     id: 13,
-//     text: "Могло ли что-то спровоцировать приступ головной боли (стресс, продукты питания и тд)",
-//   },
-//   { id: 14,
-//     text: "Препарат, доза, эффект" },
-// ]);
+const questionList = reactive([
+  {
+    id: 1,
+    type: "text",
+    label: "Как тебя зовут?",
+    model: "name",
+    placeholder: "Введите имя",
+    required: true,
+  },
+  {
+    id: 2,
+    type: "date",
+    label: "Текущая дата",
+    model: "date",
+    required: true,
+  },
+  {
+    id: 3,
+    type: "radio",
+    label: "Была ли у Вас сегодня головная боль (ГБ)?",
+    model: "headacheToday",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 4,
+    type: "radio",
+    label:
+      "В течение часа ДО возникновения головной боли отмечати ли вы              зрительные нарушения (цветные вспышки, зигзаги, слепые пятна) или обонятельные ( ощущение посторонних запахов)",
+    model: "aura",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 4,
+    type: "radio",
+    label:
+      "В течение часа ДО возникновения головной боли отмечати ли вы              зрительные нарушения (цветные вспышки, зигзаги, слепые пятна) или обонятельные ( ощущение посторонних запахов)",
+    model: "aura",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 5,
+    type: "checkbox",
+    label: "Где отмечалась головная боль?",
+    model: "location",
+    option: [
+      { value: "one", label: "C одной стороны" },
+      { value: "two", label: "С обеих сторон" },
+    ],
+    required: true,
+  },
+  {
+    id: 6,
+    type: "checkbox",
+    label: "Характер ГБ",
+    model: "headacheType",
+    option: [
+      { value: "press", label: "Давящая" },
+      { value: "puls", label: "Пульсирующая" },
+    ],
+    required: true,
+  },
+  {
+    id: 7,
+    type: "checkbox",
+    label:
+      "Интенсивность головной боли в баллах (Выберите интенсивность из списка)",
+    model: "intensity",
+    option: 11,
+    required: true,
+  },
+  {
+    id: 8,
+    type: "radio",
+    label: "Усиливалась ли при физической нагрузке?",
+    model: "physicalActivity",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 9,
+    type: "radio",
+    label: "Сопровождалась ли тошнотой?",
+    model: "nausea",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 10,
+    type: "radio",
+    label: "Сопровождалась ли рвотой?",
+    model: "vomiting",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 11,
+    type: "radio",
+    label: "Раздражал ли свет?",
+    model: "lightSensitivity",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 12,
+    type: "radio",
+    label: "Раздражал ли звук?",
+    model: "soundSensitivity",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ],
+    required: true,
+  },
+  {
+    id: 13,
+    type: "text",
+    label: "Какой препарат приняли?",
+    model: "drugName",
+    placeholder: "Введите название препарата",
+  },
+  {
+    id: 14,
+    type: "text",
+    label: "Какая дозировка (мг) ?",
+    model: "drugMass",
+    placeholder: "Введите дозировку препарата",
+  },
+  {
+    id: 15,
+    type: "radio",
+    label: "Был эффект от приема препарата?",
+    model: "drugEffect",
+    option: [
+      { value: "yes", label: "Да" },
+      { value: "no", label: "Нет" },
+    ]
+  },
+]);
 </script>
 
 <template>
   <div class="'container'">
     <form class="card" @submit.prevent="submitForm">
       <h2>Список вопросов</h2>
-      <ol>
+      <ol v-for="question in questionList" :key="question.id">
+        <div v-if="question.type === 'text'" class="form-control">
+          <label :for="question.model"
+            >{{ question.id }}. {{ question.label }}</label
+          >
+          <input
+            :type="question.type"
+            :id="question.model"
+            v-model.trim="form[question.model]"
+            :placeholder="question.placeholder"
+          />
+          <small v-if="errors[question.model]">{{
+            errors[question.model]
+          }}</small>
+        </div>
+
+        <div v-if="question.type === 'date'" class="form-control">
+          <label :for="question.model"
+            >{{ question.id }}. {{ question.label }}</label
+          >
+          <input
+            :type="question.type"
+            :id="question.model"
+            v-model.trim="form[question.model]"
+          />
+        </div>
+      </ol>
+      <!-- <ol>
         <li>
-          <div class="form-control" :class="{inValid : errors.name }">
+          <div class="form-control" :class="{ inValid: errors.name }">
             <label for="name">Как тебя зовут?</label>
             <input
-              type="text"
+              headacheType="text"
               id="name"
               placeholder="Введите имя"
               v-model.trim="name"
@@ -122,7 +311,12 @@ function submitForm() {
         <li>
           <div class="form-control">
             <label for="date">Текущая дата</label>
-            <input type="date" id="date" name="calendar" v-model="date" />
+            <input
+              headacheType="date"
+              id="date"
+              name="calendar"
+              v-model="date"
+            />
           </div>
         </li>
         <li>
@@ -130,18 +324,18 @@ function submitForm() {
             <label>Была ли у Вас сегодня головная боль (ГБ)?</label>
             <label for="yes"
               ><input
-                type="radio"
-                name="headacheCheck"
-                v-model="headacheCheck"
+                headacheType="radio"
+                name="headacheToday"
+                v-model="headacheToday"
                 value="yes"
               />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
-                name="headacheCheck"
-                v-model="headacheCheck"
+                headacheType="radio"
+                name="headacheToday"
+                v-model="headacheToday"
                 value="no"
               />Нет</label
             >
@@ -157,18 +351,18 @@ function submitForm() {
             </label>
             <label for="yes"
               ><input
-                type="radio"
-                name="headacheAura"
-                v-model="headacheAura"
+                headacheType="radio"
+                name="aura"
+                v-model="aura"
                 value="yes"
               />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
-                name="headacheAura"
-                v-model="headacheAura"
+                headacheType="radio"
+                name="aura"
+                v-model="aura"
                 value="no"
               />Нет</label
             >
@@ -180,18 +374,18 @@ function submitForm() {
 
             <label for="one"
               ><input
-                type="checkbox"
-                name="headacheWhere"
-                v-model="where"
+                headacheType="checkbox"
+                name="headachelocation"
+                v-model="location"
                 value="one"
               />C одной стороны</label
             >
 
             <label for="two"
               ><input
-                type="checkbox"
-                name="headacheWhere"
-                v-model="where"
+                headacheType="checkbox"
+                name="headachelocation"
+                v-model="location"
                 value="two"
               />С обеих сторон</label
             >
@@ -203,18 +397,18 @@ function submitForm() {
 
             <label for="pressing"
               ><input
-                type="checkbox"
-                name="headacheType"
-                v-model="type"
+                headacheType="checkbox"
+                name="headacheheadacheType"
+                v-model="headacheType"
                 value="press"
               />Давящая</label
             >
 
             <label for="pulse"
               ><input
-                type="checkbox"
-                name="headacheType"
-                v-model="type"
+                headacheType="checkbox"
+                name="headacheheadacheType"
+                v-model="headacheType"
                 value="puls"
               />Пульсирующая</label
             >
@@ -226,7 +420,7 @@ function submitForm() {
               Интенсивность головной боли в баллах (Выберите интенсивность из
               списка)
             </label>
-            <select id="strong" class="intensity-select" v-model="strong">
+            <select id="intensity" class="intensity-select" v-model="intensity">
               <option v-for="n in 11" :key="n" :value="n - 1">
                 {{ n - 1 }}
               </option>
@@ -237,14 +431,19 @@ function submitForm() {
           <div class="form-control">
             <label>Усиливалась ли при физической нагрузке?</label>
             <label for="yes"
-              ><input type="radio" name="sport" v-model="sport" value="yes" />
+              ><input
+                headacheType="radio"
+                name="physicalActivity"
+                v-model="physicalActivity"
+                value="yes"
+              />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
-                name="sport"
-                v-model="sport"
+                headacheType="radio"
+                name="physicalActivity"
+                v-model="physicalActivity"
                 value="no"
               />Нет</label
             >
@@ -254,12 +453,17 @@ function submitForm() {
           <div class="form-control">
             <label>Сопровождалась ли тошнотой?</label>
             <label for="yes"
-              ><input type="radio" name="Nausea" v-model="nausea" value="yes" />
+              ><input
+                headacheType="radio"
+                name="Nausea"
+                v-model="nausea"
+                value="yes"
+              />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
+                headacheType="radio"
                 name="Nausea"
                 v-model="nausea"
                 value="no"
@@ -271,14 +475,19 @@ function submitForm() {
           <div class="form-control">
             <label>Сопровождалась ли рвотой?</label>
             <label for="yes"
-              ><input type="radio" name="Puke" v-model="puke" value="yes" />
+              ><input
+                headacheType="radio"
+                name="vomiting"
+                v-model="vomiting"
+                value="yes"
+              />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
-                name="Puke"
-                v-model="puke"
+                headacheType="radio"
+                name="vomiting"
+                v-model="vomiting"
                 value="no"
               />Нет</label
             >
@@ -288,14 +497,19 @@ function submitForm() {
           <div class="form-control">
             <label>Раздражал ли свет?</label>
             <label for="yes"
-              ><input type="radio" name="Light" v-model="light" value="yes" />
+              ><input
+                headacheType="radio"
+                name="lightSensitivity"
+                v-model="lightSensitivity"
+                value="yes"
+              />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
-                name="Light"
-                v-model="light"
+                headacheType="radio"
+                name="lightSensitivity"
+                v-model="lightSensitivity"
                 value="no"
               />Нет</label
             >
@@ -305,36 +519,41 @@ function submitForm() {
           <div class="form-control">
             <label>Раздражал ли звук?</label>
             <label for="yes"
-              ><input type="radio" name="sound" v-model="sound" value="yes" />
+              ><input
+                headacheType="radio"
+                name="soundSensitivity "
+                v-model="soundSensitivity"
+                value="yes"
+              />
               Да</label
             >
             <label for="no"
               ><input
-                type="radio"
-                name="sound"
-                v-model="sound"
+                headacheType="radio"
+                name="soundSensitivity "
+                v-model="soundSensitivity"
                 value="no"
               />Нет</label
             >
           </div>
         </li>
         <li>
-          <div class="form-control" >
+          <div class="form-control">
             <div>
               <div class="form-drug">
                 <div>
                   <label for="drug-name"> Какой препарат приняли?</label>
                   <input
-                    type="text"
+                    headacheType="text"
                     id="drug-name"
                     placeholder="Введите название препарата"
                     v-model.trim="drugName"
                   />
                 </div>
-                <div class="form-control" :class="{inValid : errors.drugMass }">
+                <div class="form-control" :class="{ inValid: errors.drugMass }">
                   <label for="drug-mass"> Какая дозировка (мг) ?</label>
                   <input
-                    type="text"
+                    headacheType="text"
                     id="drug-mass"
                     placeholder="Введите дозировку препарата"
                     v-model.number="drugMass"
@@ -345,18 +564,18 @@ function submitForm() {
                   <label>Эффект от приема препарата был?</label>
                   <label for="yes"
                     ><input
-                      type="radio"
-                      name="effect"
-                      v-model="effect"
+                      headacheType="radio"
+                      name="drugEffect"
+                      v-model="drugEffect"
                       value="yes"
                     />
                     Да</label
                   >
                   <label for="no"
                     ><input
-                      type="radio"
-                      name="effect"
-                      v-model="effect"
+                      headacheType="radio"
+                      name="drugEffect"
+                      v-model="drugEffect"
                       value="no"
                     />Нет</label
                   >
@@ -365,17 +584,17 @@ function submitForm() {
             </div>
           </div>
         </li>
-      </ol>
-      <button type="submit" class="btn">Отправить</button>
+      </ol> -->
+      <button headacheType="submit" class="btn">Отправить</button>
     </form>
   </div>
 </template>
 
 <style scoped>
-.form-control small{
-  color: red
+.form-control small {
+  color: red;
 }
-.form-control.inValid input{
-  border-color: red
+.form-control.inValid input {
+  border-color: red;
 }
-</style>
+</style> -->
