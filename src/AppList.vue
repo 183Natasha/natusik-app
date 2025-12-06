@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 
 const form = reactive({
   name: "",
@@ -25,14 +25,16 @@ const errors = reactive({
   intensity: null,
   headacheToday: null,
   aura: null,
+  location: null,
+  headacheType: null,
   physicalActivity: null,
   nausea: null,
   vomiting: null,
   lightSensitivity: null,
+  soundSensitivity: null,
   drugName: null,
   drugMass: null,
   drugEffect: null,
-  location: null,
 });
 
 function formIsValid() {
@@ -50,7 +52,55 @@ function formIsValid() {
     isValid = false;
   }
 
-if (form.drugName.trim()) {
+  if (!form.headacheToday) {
+    errors.headacheToday = "Ответьте на этот вопрос";
+    isValid = false;
+  }
+
+  if (form.headacheToday === "yes") {
+    let message =
+      "* При наличии головной боли это поле обязательно для заполнения";
+
+    if (!form.aura) {
+      errors.aura = message;
+      isValid = false;
+    }
+    if (!form.location || form.location.length === 0) {
+      errors.location = message;
+      isValid = false;
+    }
+
+    if (!form.headacheType || form.headacheType.length === 0) {
+      errors.headacheType = message;
+      isValid = false;
+    }
+    if (!form.intensity) {
+      errors.intensity = message;
+      isValid = false;
+    }
+    if (!form.physicalActivity) {
+      errors.physicalActivity = message;
+      isValid = false;
+    }
+    if (!form.nausea) {
+      errors.nausea = message;
+      isValid = false;
+    }
+    if (!form.vomiting) {
+      errors.vomiting = message;
+      isValid = false;
+    }
+    if (!form.lightSensitivity) {
+      errors.lightSensitivity = message;
+      isValid = false;
+    }
+    if (!form.soundSensitivity) {
+      errors.soundSensitivity = message;
+      isValid = false;
+    }
+  }
+
+  if (form.drugName.trim()) {
     if (!form.drugMass.trim()) {
       errors.drugMass = "Введите дозировку препарата";
       isValid = false;
@@ -61,13 +111,13 @@ if (form.drugName.trim()) {
         isValid = false;
       }
     }
-    
+
     if (!form.drugEffect) {
       errors.drugEffect = "Оцените эффект препарата";
       isValid = false;
     }
   }
-  
+
   if (form.drugMass.trim() && !form.drugName.trim()) {
     errors.drugName = "Укажите название препарата";
     isValid = false;
@@ -75,8 +125,6 @@ if (form.drugName.trim()) {
 
   return isValid;
 }
-
-
 
 function submitForm() {
   if (formIsValid()) {
@@ -237,14 +285,16 @@ const questionList = reactive([
   {
     id: 13,
     type: "text",
-    label: "Какой препарат приняли?",
+    label:
+      "Заполните поля ниже, если головная боль требовала использование медикаментов",
+    sublabels: ["Какой препарат Вы приняли?"],
     model: "drugName",
     placeholder: "Введите название препарата",
   },
   {
     id: 14,
     type: "text",
-    label: "Какая дозировка (мг) ?",
+    label: "Какая дозировка (мг)?",
     model: "drugMass",
     placeholder: "Введите дозировку препарата",
   },
@@ -265,110 +315,122 @@ const questionList = reactive([
   <div class="'container'">
     <form class="card" @submit.prevent="submitForm">
       <h2>Список вопросов</h2>
-      <ol v-for="question in questionList" :key="question.id">
-        <div v-if="question.type === 'text'" class="form-control">
-          <label :for="question.model"
-            >{{ question.id }}. {{ question.label }}</label
-          >
-          <input
-            :type="question.type"
-            :id="question.model"
-            v-model.trim="form[question.model]"
-            :placeholder="question.placeholder"
-            :required="question.required"
-          />
-          <small v-if="errors[question.model]">{{
-            errors[question.model]
-          }}</small>
-        </div>
+      <ol>
+        <li v-for="question in questionList" :key="question.id">
 
-        <div v-if="question.type === 'date'" class="form-control">
-          <label :for="question.model"
-            >{{ question.id }}. {{ question.label }}</label
-          >
-          <input
-            :type="question.type"
-            :id="question.model"
-            v-model.trim="form[question.model]"
-            :required="question.required"
-          />
-          <small v-if="errors[question.model]">{{
-            errors[question.model]
-          }}</small>
-        </div>
-
-        <div v-if="question.type === 'radio'" class="form-control">
-          <div class="question-label">
-            {{ question.id }}. {{ question.label }}
-          </div>
-          <div
-            v-for="(sublabel, index) in question.sublabels"
-            :key="index"
-            class="question-sublabel"
-          >
-            {{ sublabel }}
-          </div>
-          <div v-for="option in question.options" :key="option.value">
-            <label>
-              <input
-                type="radio"
-                :name="question.model"
-                :value="option.value"
-                v-model="form[question.model]"
-                :required="question.required"
-              />
-              {{ option.label }}
-            </label>
-          </div>
-          <small v-if="errors[question.model]">{{
-            errors[question.model]
-          }}</small>
-        </div>
-
-        <div v-if="question.type === 'checkbox'" class="form-control">
-          <div class="question-label">
-            {{ question.id }}. {{ question.label }}
-          </div>
-          <div v-for="option in question.options" :key="option.value">
-            <label>
-              <input
-                type="checkbox"
-                :value="option.value"
-                v-model="form[question.model]"
-                :required="question.required"
-              />
-              {{ option.label }}
-            </label>
-          </div>
-          <small v-if="errors[question.model]">{{
-            errors[question.model]
-          }}</small>
-        </div>
-
-        <div v-if="question.type === 'select'" class="form-control">
-          <label :for="question.model"
-            >{{ question.id }}. {{ question.label }}</label
-          >
-          <select
-            :id="question.model"
-            v-model="form[question.model]"
-            :required="question.required"
-          >
-            <option value="" disabled selected>
-              {{ question.placeholder || "-- Выберите --" }}
-            </option>
-
-            <option
-              v-for="option in question.options"
-              :key="option.value"
-              :value="option.value"
+        
+          <div v-if="question.type === 'text'" class="form-control">
+            <label :for="question.model"> {{ question.label }}</label>
+            <small v-if="errors[question.model]">{{
+              errors[question.model]
+            }}</small>
+            <div
+              v-for="(sublabel, index) in question.sublabels"
+              :key="index"
+              class="question-sublabel"
             >
-              {{ option.label }}
-            </option>
-          </select>.<small v-if="errors[question.model]">{{
-            errors[question.model]
-          }}</small>
-        </div>
+              {{ sublabel }}
+            </div>
+            <div>
+              <input
+                :type="question.type"
+                :id="question.model"
+                v-model.trim="form[question.model]"
+                :placeholder="question.placeholder"
+                :required="question.required"
+              />
+            </div>
+          </div>
+
+          <div v-if="question.type === 'date'" class="form-control">
+            <label :for="question.model"> {{ question.label }}</label>
+            <small v-if="errors[question.model]">{{
+              errors[question.model]
+            }}</small>
+            <input
+              :type="question.type"
+              :id="question.model"
+              v-model.trim="form[question.model]"
+              :required="question.required"
+            />
+          </div>
+
+          <div v-if="question.type === 'radio'" class="form-control">
+            <div class="question-label">
+              {{ question.label }}
+            </div>
+            <div
+              v-for="(sublabel, index) in question.sublabels"
+              :key="index"
+              class="question-sublabel"
+            >
+              {{ sublabel }}
+            </div>
+            <small v-if="errors[question.model]">{{
+              errors[question.model]
+            }}</small>
+            <div v-for="option in question.options" :key="option.value">
+              <label>
+                <input
+                  type="radio"
+                  :name="question.model"
+                  :value="option.value"
+                  v-model="form[question.model]"
+                  :required="question.required"
+                />
+                {{ option.label }}
+              </label>
+            </div>
+          </div>
+
+          <div v-if="question.type === 'checkbox'" class="form-control">
+            <div class="question-label">
+              {{ question.label }}
+            </div>
+            <small v-if="errors[question.model]">{{
+              errors[question.model]
+            }}</small>
+            <div v-for="option in question.options" :key="option.value">
+              <label>
+                <input
+                  type="checkbox"
+                  :value="option.value"
+                  v-model="form[question.model]"
+                  :required="question.required"
+                />
+                {{ option.label }}
+              </label>
+            </div>
+          </div>
+
+          <div v-if="question.type === 'select'" class="form-control">
+            <label :for="question.model"> {{ question.label }}</label>
+            <div>
+              <small v-if="errors[question.model]">{{
+                errors[question.model]
+              }}</small>
+            </div>
+            <div>
+              <select
+                :id="question.model"
+                v-model="form[question.model]"
+                :required="question.required"
+              >
+                <option value="" disabled selected>
+                  {{ question.placeholder || "-- Выберите --" }}
+                </option>
+
+                <option
+                  v-for="option in question.options"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </li>
       </ol>
 
       <button type="submit" class="btn">Отправить</button>
