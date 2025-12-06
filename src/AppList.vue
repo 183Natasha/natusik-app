@@ -40,22 +40,26 @@ function formIsValid() {
 
   Object.keys(errors).forEach((key) => (errors[key] = null));
 
-  if (obj.name.value.length === 0) {
-    errors.value.name = "Введите ваше имя";
+  if (!form.name.trim()) {
+    errors.name = "Введите ваше имя";
     isValid = false;
-  } else {
-    errors.value.name = null;
   }
+  
+  if (!form.date) {
+    errors.date = "Выберите дату";
+    isValid = false;
+  }
+  
 
-  if (isNaN(drugMass.value) || drugMass.value === "") {
-    errors.value.drugMass = "Введите корректное число";
-    isValid = false;
-  } else if (Number(drugMass.value) <= 0) {
-    errors.value.drugMass = "Дозировка должна быть больше 0";
-    isValid = false;
-  } else {
-    errors.value.drugMass = null;
-  }
+  // if (isNaN(drugMass.value) || drugMass.value === "") {
+  //   errors.value.drugMass = "Введите корректное число";
+  //   isValid = false;
+  // } else if (Number(drugMass.value) <= 0) {
+  //   errors.value.drugMass = "Дозировка должна быть больше 0";
+  //   isValid = false;
+  // } else {
+  //   errors.value.drugMass = null;
+  // }
 
   return isValid;
 }
@@ -63,21 +67,21 @@ function formIsValid() {
 function submitForm() {
   if (formIsValid()) {
     const formData = {
-      name: name.value,
-      date: date.value,
-      intensity: intensity.value,
-      headacheToday: headacheToday.value,
-      aura: aura.value,
-      location: location.value,
-      headacheType: headacheType.value,
-      physicalActivity: physicalActivity.value,
-      nausea: nausea.value,
-      vomiting: vomiting.value,
-      lightSensitivity: lightSensitivity.value,
-      soundSensitivity: soundSensitivity.value,
-      drugName: drugName.value,
-      drugMass: drugMass.value,
-      drugEffect: drugEffect.value,
+      name: form.name,
+      date: form.date,
+      intensity: form.intensity,
+      headacheToday: form.headacheToday,
+      aura: form.aura,
+      location: form.location,
+      headacheType: form.headacheType,
+      physicalActivity: form.physicalActivity,
+      nausea: form.nausea,
+      vomiting: form.vomiting,
+      lightSensitivity: form.lightSensitivity,
+      soundSensitivity: form.soundSensitivity,
+      drugName: form.drugName,
+      drugMass: form.drugMass,
+      drugEffect: form.drugEffect,
     };
 
     console.log("Form Data:", formData);
@@ -354,4 +358,4 @@ const questionList = reactive([
 .form-control.inValid input {
   border-color: red;
 }
-</style> -->
+</style> 
