@@ -133,19 +133,7 @@ const questionList = reactive([
     label:
       "В течение часа ДО возникновения головной боли отмечати ли вы              зрительные нарушения (цветные вспышки, зигзаги, слепые пятна) или обонятельные ( ощущение посторонних запахов)",
     model: "aura",
-    option: [
-      { value: "yes", label: "Да" },
-      { value: "no", label: "Нет" },
-    ],
-    required: true,
-  },
-  {
-    id: 4,
-    type: "radio",
-    label:
-      "В течение часа ДО возникновения головной боли отмечати ли вы              зрительные нарушения (цветные вспышки, зигзаги, слепые пятна) или обонятельные ( ощущение посторонних запахов)",
-    model: "aura",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -156,7 +144,7 @@ const questionList = reactive([
     type: "checkbox",
     label: "Где отмечалась головная боль?",
     model: "location",
-    option: [
+    options: [
       { value: "one", label: "C одной стороны" },
       { value: "two", label: "С обеих сторон" },
     ],
@@ -167,7 +155,7 @@ const questionList = reactive([
     type: "checkbox",
     label: "Характер ГБ",
     model: "headacheType",
-    option: [
+    options: [
       { value: "press", label: "Давящая" },
       { value: "puls", label: "Пульсирующая" },
     ],
@@ -175,19 +163,32 @@ const questionList = reactive([
   },
   {
     id: 7,
-    type: "checkbox",
+    type: "select",
     label:
       "Интенсивность головной боли в баллах (Выберите интенсивность из списка)",
     model: "intensity",
-    option: 11,
+    options: [
+      { value: "0", label: "0 - Нет боли" },
+      { value: "1", label: "1" },
+      { value: "2", label: "2" },
+      { value: "3", label: "3" },
+      { value: "4", label: "4" },
+      { value: "5", label: "5 - Средняя боль" },
+      { value: "6", label: "6" },
+      { value: "7", label: "7" },
+      { value: "8", label: "8" },
+      { value: "9", label: "9" },
+      { value: "10", label: "10 - Невыносимая боль" },
+    ],
     required: true,
+    placeholder: "Выберите значение от 0 до 10", // текст по умолчанию
   },
   {
     id: 8,
     type: "radio",
     label: "Усиливалась ли при физической нагрузке?",
     model: "physicalActivity",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -198,7 +199,7 @@ const questionList = reactive([
     type: "radio",
     label: "Сопровождалась ли тошнотой?",
     model: "nausea",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -209,7 +210,7 @@ const questionList = reactive([
     type: "radio",
     label: "Сопровождалась ли рвотой?",
     model: "vomiting",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -220,7 +221,7 @@ const questionList = reactive([
     type: "radio",
     label: "Раздражал ли свет?",
     model: "lightSensitivity",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -231,7 +232,7 @@ const questionList = reactive([
     type: "radio",
     label: "Раздражал ли звук?",
     model: "soundSensitivity",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -256,10 +257,10 @@ const questionList = reactive([
     type: "radio",
     label: "Был эффект от приема препарата?",
     model: "drugEffect",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
-    ]
+    ],
   },
 ]);
 </script>
@@ -278,6 +279,7 @@ const questionList = reactive([
             :id="question.model"
             v-model.trim="form[question.model]"
             :placeholder="question.placeholder"
+            :required="question.required"
           />
           <small v-if="errors[question.model]">{{
             errors[question.model]
@@ -292,7 +294,66 @@ const questionList = reactive([
             :type="question.type"
             :id="question.model"
             v-model.trim="form[question.model]"
+            :required="question.required"
           />
+        </div>
+
+        <div v-if="question.type === 'radio'" class="form-control">
+          <div class="question-label">
+            {{ question.id }}. {{ question.label }}
+          </div>
+          <div v-for="option in question.options" :key="option.value">
+            <label>
+              <input
+                type="radio"
+                :name="question.model"
+                :value="option.value"
+                v-model="form[question.model]"
+                :required="question.required"
+              />
+              {{ option.label }}
+            </label>
+          </div>
+        </div>
+
+        <div v-if="question.type === 'checkbox'" class="form-control">
+          <div class="question-label">
+            {{ question.id }}. {{ question.label }}
+          </div>
+          <div v-for="option in question.options" :key="option.value">
+            <label>
+              <input
+                type="checkbox"
+                :value="option.value"
+                v-model="form[question.model]"
+                :required="question.required"
+              />
+              {{ option.label }}
+            </label>
+          </div>
+        </div>
+
+        <div v-if="question.type === 'select'" class="form-control">
+          <label :for="question.model">{{ question.id }}. {{ question.label }}</label>
+          <select
+            :id="question.model"
+            v-model="form[question.model]"
+            :required="question.required"
+          >
+            
+            <option value="" disabled selected>
+              {{ question.placeholder || "-- Выберите --" }}
+            </option>
+
+          
+            <option
+              v-for="option in question.options"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </select>
         </div>
       </ol>
       <!-- <ol>
