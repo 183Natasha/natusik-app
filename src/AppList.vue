@@ -31,7 +31,7 @@ const errors = reactive({
   lightSensitivity: null,
   drugName: null,
   drugMass: null,
-  drugdrugEffect: null,
+  drugEffect: null,
   location: null,
 });
 
@@ -44,25 +44,39 @@ function formIsValid() {
     errors.name = "Введите ваше имя";
     isValid = false;
   }
-  
+
   if (!form.date) {
     errors.date = "Выберите дату";
     isValid = false;
   }
-  
 
-  // if (isNaN(drugMass.value) || drugMass.value === "") {
-  //   errors.value.drugMass = "Введите корректное число";
-  //   isValid = false;
-  // } else if (Number(drugMass.value) <= 0) {
-  //   errors.value.drugMass = "Дозировка должна быть больше 0";
-  //   isValid = false;
-  // } else {
-  //   errors.value.drugMass = null;
-  // }
+if (form.drugName.trim()) {
+    if (!form.drugMass.trim()) {
+      errors.drugMass = "Введите дозировку препарата";
+      isValid = false;
+    } else {
+      const mass = Number(form.drugMass);
+      if (isNaN(mass) || mass <= 0) {
+        errors.drugMass = "Введите корректную дозировку (число > 0)";
+        isValid = false;
+      }
+    }
+    
+    if (!form.drugEffect) {
+      errors.drugEffect = "Оцените эффект препарата";
+      isValid = false;
+    }
+  }
+  
+  if (form.drugMass.trim() && !form.drugName.trim()) {
+    errors.drugName = "Укажите название препарата";
+    isValid = false;
+  }
 
   return isValid;
 }
+
+
 
 function submitForm() {
   if (formIsValid()) {
@@ -278,6 +292,9 @@ const questionList = reactive([
             v-model.trim="form[question.model]"
             :required="question.required"
           />
+          <small v-if="errors[question.model]">{{
+            errors[question.model]
+          }}</small>
         </div>
 
         <div v-if="question.type === 'radio'" class="form-control">
@@ -303,6 +320,9 @@ const questionList = reactive([
               {{ option.label }}
             </label>
           </div>
+          <small v-if="errors[question.model]">{{
+            errors[question.model]
+          }}</small>
         </div>
 
         <div v-if="question.type === 'checkbox'" class="form-control">
@@ -320,6 +340,9 @@ const questionList = reactive([
               {{ option.label }}
             </label>
           </div>
+          <small v-if="errors[question.model]">{{
+            errors[question.model]
+          }}</small>
         </div>
 
         <div v-if="question.type === 'select'" class="form-control">
@@ -342,7 +365,9 @@ const questionList = reactive([
             >
               {{ option.label }}
             </option>
-          </select>
+          </select>.<small v-if="errors[question.model]">{{
+            errors[question.model]
+          }}</small>
         </div>
       </ol>
 
