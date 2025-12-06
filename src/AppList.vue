@@ -12,7 +12,7 @@ const form = reactive({
   vomiting: "",
   lightSensitivity: "",
   soundSensitivity: "",
-  medicamentos: "",
+  medication: "",
   drugName: "",
   drugMass: "",
   drugEffect: "",
@@ -33,7 +33,7 @@ const errors = reactive({
   vomiting: null,
   lightSensitivity: null,
   soundSensitivity: null,
-  medicamentos: null,
+  medication: null,
   drugName: null,
   drugMass: null,
   drugEffect: null,
@@ -67,7 +67,7 @@ function formIsValid() {
       errors.aura = message;
       isValid = false;
     }
-    if (!form.location || form.location.length === 0) {
+    if (!form.location?.length) {
       errors.location = message;
       isValid = false;
     }
@@ -143,12 +143,16 @@ function submitForm() {
       vomiting: form.vomiting,
       lightSensitivity: form.lightSensitivity,
       soundSensitivity: form.soundSensitivity,
+      medication: form.medication,
       drugName: form.drugName,
       drugMass: form.drugMass,
       drugEffect: form.drugEffect,
     };
 
     console.log("Form Data:", formData);
+
+    //сброс формы
+    //сохранение в localStorage
   }
 }
 
@@ -185,7 +189,7 @@ const headacheQuestions = reactive([
   {
     id: 4,
     type: "radio",
-    label: "В течение часа ДО возникновения головной боли отмечати ли вы:",
+    label: "В течение часа ДО возникновения головной боли отмечали ли вы:",
     sublabels: [
       "- зрительные нарушения (цветные вспышки, зигзаги, слепые пятна)",
       "- И/ИЛИ обонятельные (ощущение посторонних запахов)",
@@ -291,7 +295,7 @@ const headacheQuestions = reactive([
     id: 13,
     type: "radio",
     label: "Головная боль требовала использование медикаментов",
-    model: "medicamentos",
+    model: "medication",
     options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
@@ -337,9 +341,7 @@ const drugQuestions = reactive([
         <li v-for="question in basicQuestions" :key="question.id">
           <div v-if="question.type === 'text'" class="form-control">
             <label :for="question.model"> {{ question.label }}</label>
-            <small v-if="errors[question.model]">{{
-              errors[question.model]
-            }}</small>
+
             <input
               :type="question.type"
               :id="question.model"
@@ -347,28 +349,30 @@ const drugQuestions = reactive([
               :placeholder="question.placeholder"
               :required="question.required"
             />
+            <small v-if="errors[question.model]">{{
+              errors[question.model]
+            }}</small>
           </div>
 
           <div v-if="question.type === 'date'" class="form-control">
             <label :for="question.model"> {{ question.label }}</label>
-            <small v-if="errors[question.model]">{{
-              errors[question.model]
-            }}</small>
+
             <input
               :type="question.type"
               :id="question.model"
               v-model.trim="form[question.model]"
               :required="question.required"
             />
+            <small v-if="errors[question.model]">{{
+              errors[question.model]
+            }}</small>
           </div>
 
           <div v-if="question.type === 'radio'" class="form-control">
             <div class="question-label">
               {{ question.label }}
             </div>
-            <small v-if="errors[question.model]">{{
-              errors[question.model]
-            }}</small>
+
             <div v-for="option in question.options" :key="option.value">
               <label>
                 <input
@@ -378,8 +382,12 @@ const drugQuestions = reactive([
                   v-model="form[question.model]"
                   :required="question.required"
                 />
+
                 {{ option.label }}
               </label>
+              <small v-if="errors[question.model]">{{
+                errors[question.model]
+              }}</small>
             </div>
           </div>
         </li>
@@ -398,9 +406,7 @@ const drugQuestions = reactive([
               >
                 {{ sublabel }}
               </div>
-              <small v-if="errors[question.model]">{{
-                errors[question.model]
-              }}</small>
+
               <div v-for="option in question.options" :key="option.value">
                 <label>
                   <input
@@ -432,6 +438,9 @@ const drugQuestions = reactive([
                   />
                   {{ option.label }}
                 </label>
+                <small v-if="errors[question.model]">{{
+                  errors[question.model]
+                }}</small>
               </div>
             </div>
 
@@ -440,28 +449,30 @@ const drugQuestions = reactive([
               <small v-if="errors[question.model]">{{
                 errors[question.model]
               }}</small>
-              <select
-                :id="question.model"
-                v-model="form[question.model]"
-                :required="question.required"
-              >
-                <option value="" disabled selected>
-                  {{ question.placeholder || "-- Выберите --" }}
-                </option>
-                <option
-                  v-for="option in question.options"
-                  :key="option.value"
-                  :value="option.value"
+              <div>
+                <select
+                  :id="question.model"
+                  v-model="form[question.model]"
+                  :required="question.required"
                 >
-                  {{ option.label }}
-                </option>
-              </select>
+                  <option value="" disabled selected>
+                    {{ question.placeholder || "-- Выберите --" }}
+                  </option>
+                  <option
+                    v-for="option in question.options"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
             </div>
           </li>
         </div>
 
         <!-- Вопросы про препараты (14-16) показываются в случае приема препаратов-->
-        <div v-if="form.medicamentos === 'yes'">
+        <div v-if="form.medication === 'yes'">
           <li v-for="question in drugQuestions" :key="question.id">
             <div v-if="question.type === 'text'" class="form-control">
               <label :for="question.model"> {{ question.label }}</label>
@@ -488,9 +499,7 @@ const drugQuestions = reactive([
               <div class="question-label">
                 {{ question.label }}
               </div>
-              <small v-if="errors[question.model]">{{
-                errors[question.model]
-              }}</small>
+
               <div v-for="option in question.options" :key="option.value">
                 <label>
                   <input
@@ -502,6 +511,9 @@ const drugQuestions = reactive([
                   />
                   {{ option.label }}
                 </label>
+                <small v-if="errors[question.model]">{{
+                  errors[question.model]
+                }}</small>
               </div>
             </div>
           </li>
