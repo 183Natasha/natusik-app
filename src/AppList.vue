@@ -28,7 +28,7 @@ const errors = reactive({
   physicalActivity: null,
   nausea: null,
   vomiting: null,
-  lightSensitivitySensitivity: null,
+  lightSensitivity: null,
   drugName: null,
   drugMass: null,
   drugdrugEffect: null,
@@ -346,7 +346,7 @@ const questionList = reactive([
         </div>
       </ol>
 
-      <button headacheType="submit" class="btn">Отправить</button>
+      <button type="submit" class="btn">Отправить</button>
     </form>
   </div>
 </template>
