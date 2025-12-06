@@ -19,22 +19,6 @@ const form = reactive({
   headacheType: [],
 });
 
-// const name = ref("");
-// const date = ref("");
-// const intensity = ref("");
-// const headacheToday = ref("");
-// const aura = ref("");
-// const physicalActivity = ref("");
-// const nausea = ref("");
-// const vomiting = ref("");
-// const lightSensitivity = ref("");
-// const soundSensitivity = ref("");
-// const drugName = ref("");
-// const drugMass = ref("");
-// const drugEffect = ref("");
-// const location = ref([]);
-// const headacheType = ref([]);
-
 const errors = reactive({
   name: null,
   date: null,
@@ -121,7 +105,7 @@ const questionList = reactive([
     type: "radio",
     label: "Была ли у Вас сегодня головная боль (ГБ)?",
     model: "headacheToday",
-    option: [
+    options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
@@ -130,14 +114,16 @@ const questionList = reactive([
   {
     id: 4,
     type: "radio",
-    label:
-      "В течение часа ДО возникновения головной боли отмечати ли вы              зрительные нарушения (цветные вспышки, зигзаги, слепые пятна) или обонятельные ( ощущение посторонних запахов)",
+    label: "В течение часа ДО возникновения головной боли отмечати ли вы:",
+    sublabels: [
+      "- зрительные нарушения (цветные вспышки, зигзаги, слепые пятна)",
+      "- И/ИЛИ обонятельные (ощущение посторонних запахов)",
+    ],
     model: "aura",
     options: [
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
-    required: true,
   },
   {
     id: 5,
@@ -148,7 +134,6 @@ const questionList = reactive([
       { value: "one", label: "C одной стороны" },
       { value: "two", label: "С обеих сторон" },
     ],
-    required: true,
   },
   {
     id: 6,
@@ -159,7 +144,6 @@ const questionList = reactive([
       { value: "press", label: "Давящая" },
       { value: "puls", label: "Пульсирующая" },
     ],
-    required: true,
   },
   {
     id: 7,
@@ -180,7 +164,6 @@ const questionList = reactive([
       { value: "9", label: "9" },
       { value: "10", label: "10 - Невыносимая боль" },
     ],
-    required: true,
     placeholder: "Выберите значение от 0 до 10", // текст по умолчанию
   },
   {
@@ -192,7 +175,6 @@ const questionList = reactive([
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
-    required: true,
   },
   {
     id: 9,
@@ -203,7 +185,6 @@ const questionList = reactive([
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
-    required: true,
   },
   {
     id: 10,
@@ -214,7 +195,6 @@ const questionList = reactive([
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
-    required: true,
   },
   {
     id: 11,
@@ -225,7 +205,6 @@ const questionList = reactive([
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
-    required: true,
   },
   {
     id: 12,
@@ -236,7 +215,6 @@ const questionList = reactive([
       { value: "yes", label: "Да" },
       { value: "no", label: "Нет" },
     ],
-    required: true,
   },
   {
     id: 13,
@@ -302,6 +280,13 @@ const questionList = reactive([
           <div class="question-label">
             {{ question.id }}. {{ question.label }}
           </div>
+          <div
+            v-for="(sublabel, index) in question.sublabels"
+            :key="index"
+            class="question-sublabel"
+          >
+            {{ sublabel }}
+          </div>
           <div v-for="option in question.options" :key="option.value">
             <label>
               <input
@@ -334,18 +319,18 @@ const questionList = reactive([
         </div>
 
         <div v-if="question.type === 'select'" class="form-control">
-          <label :for="question.model">{{ question.id }}. {{ question.label }}</label>
+          <label :for="question.model"
+            >{{ question.id }}. {{ question.label }}</label
+          >
           <select
             :id="question.model"
             v-model="form[question.model]"
             :required="question.required"
           >
-            
             <option value="" disabled selected>
               {{ question.placeholder || "-- Выберите --" }}
             </option>
 
-          
             <option
               v-for="option in question.options"
               :key="option.value"
@@ -356,296 +341,7 @@ const questionList = reactive([
           </select>
         </div>
       </ol>
-      <!-- <ol>
-        <li>
-          <div class="form-control" :class="{ inValid: errors.name }">
-            <label for="name">Как тебя зовут?</label>
-            <input
-              headacheType="text"
-              id="name"
-              placeholder="Введите имя"
-              v-model.trim="name"
-            />
-            <small v-if="errors.name">{{ errors.name }}</small>
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label for="date">Текущая дата</label>
-            <input
-              headacheType="date"
-              id="date"
-              name="calendar"
-              v-model="date"
-            />
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Была ли у Вас сегодня головная боль (ГБ)?</label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="headacheToday"
-                v-model="headacheToday"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="headacheToday"
-                v-model="headacheToday"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>
-              В течение часа ДО возникновения головной боли отмечати ли вы
-              зрительные нарушения (цветные вспышки, зигзаги, слепые пятна)
-              <br />
-              или обонятельные ( ощущение посторонних запахов)
-            </label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="aura"
-                v-model="aura"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="aura"
-                v-model="aura"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Где отмечалась головная боль?</label>
 
-            <label for="one"
-              ><input
-                headacheType="checkbox"
-                name="headachelocation"
-                v-model="location"
-                value="one"
-              />C одной стороны</label
-            >
-
-            <label for="two"
-              ><input
-                headacheType="checkbox"
-                name="headachelocation"
-                v-model="location"
-                value="two"
-              />С обеих сторон</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Характер ГБ</label>
-
-            <label for="pressing"
-              ><input
-                headacheType="checkbox"
-                name="headacheheadacheType"
-                v-model="headacheType"
-                value="press"
-              />Давящая</label
-            >
-
-            <label for="pulse"
-              ><input
-                headacheType="checkbox"
-                name="headacheheadacheType"
-                v-model="headacheType"
-                value="puls"
-              />Пульсирующая</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>
-              Интенсивность головной боли в баллах (Выберите интенсивность из
-              списка)
-            </label>
-            <select id="intensity" class="intensity-select" v-model="intensity">
-              <option v-for="n in 11" :key="n" :value="n - 1">
-                {{ n - 1 }}
-              </option>
-            </select>
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Усиливалась ли при физической нагрузке?</label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="physicalActivity"
-                v-model="physicalActivity"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="physicalActivity"
-                v-model="physicalActivity"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Сопровождалась ли тошнотой?</label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="Nausea"
-                v-model="nausea"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="Nausea"
-                v-model="nausea"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Сопровождалась ли рвотой?</label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="vomiting"
-                v-model="vomiting"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="vomiting"
-                v-model="vomiting"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Раздражал ли свет?</label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="lightSensitivity"
-                v-model="lightSensitivity"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="lightSensitivity"
-                v-model="lightSensitivity"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <label>Раздражал ли звук?</label>
-            <label for="yes"
-              ><input
-                headacheType="radio"
-                name="soundSensitivity "
-                v-model="soundSensitivity"
-                value="yes"
-              />
-              Да</label
-            >
-            <label for="no"
-              ><input
-                headacheType="radio"
-                name="soundSensitivity "
-                v-model="soundSensitivity"
-                value="no"
-              />Нет</label
-            >
-          </div>
-        </li>
-        <li>
-          <div class="form-control">
-            <div>
-              <div class="form-drug">
-                <div>
-                  <label for="drug-name"> Какой препарат приняли?</label>
-                  <input
-                    headacheType="text"
-                    id="drug-name"
-                    placeholder="Введите название препарата"
-                    v-model.trim="drugName"
-                  />
-                </div>
-                <div class="form-control" :class="{ inValid: errors.drugMass }">
-                  <label for="drug-mass"> Какая дозировка (мг) ?</label>
-                  <input
-                    headacheType="text"
-                    id="drug-mass"
-                    placeholder="Введите дозировку препарата"
-                    v-model.number="drugMass"
-                  />
-                  <small v-if="errors.drugMass">{{ errors.drugMass }}</small>
-                </div>
-                <div>
-                  <label>Эффект от приема препарата был?</label>
-                  <label for="yes"
-                    ><input
-                      headacheType="radio"
-                      name="drugEffect"
-                      v-model="drugEffect"
-                      value="yes"
-                    />
-                    Да</label
-                  >
-                  <label for="no"
-                    ><input
-                      headacheType="radio"
-                      name="drugEffect"
-                      v-model="drugEffect"
-                      value="no"
-                    />Нет</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ol> -->
       <button headacheType="submit" class="btn">Отправить</button>
     </form>
   </div>
