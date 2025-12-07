@@ -113,6 +113,11 @@ function formIsValid() {
     isValid = false;
   }
 
+  if (form.medication ==='yes' && !form.drugName) {
+    errors.medication = "Укажите, подробности по принятым препаратам (вопросы 14-16)";
+    isValid = false;
+  }
+
   if (form.drugName.trim()) {
     if (!form.drugMass.trim()) {
       errors.drugMass = "Введите дозировку препарата";
