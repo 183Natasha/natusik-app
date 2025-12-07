@@ -366,60 +366,29 @@ const drugQuestions = reactive([
             :required="question.required"
           />
 
-          <div v-if="question.type === 'radio'" class="form-control">
-            <div class="question-label">
-              {{ question.label }}
-            </div>
-
-            <div v-for="option in question.options" :key="option.value">
-              <label>
-                <input
-                  type="radio"
-                  :name="question.model"
-                  :value="option.value"
-                  v-model="form[question.model]"
-                  :required="question.required"
-                />
-
-                {{ option.label }}
-              </label>
-              <small v-if="errors[question.model]">{{
-                errors[question.model]
-              }}</small>
-            </div>
-          </div>
+          <AppRadio
+            v-if="question.type === 'radio'"
+            v-model="form[question.model]"
+            :label="question.label"
+            :options="question.options"
+            :error="errors[question.model]"
+            :required="question.required"
+          />
         </li>
 
         <!-- Вопросы 4-13 показываются только если есть головная боль -->
         <div v-if="form.headacheToday === 'yes'">
           <li v-for="question in headacheQuestions" :key="question.id">
-            <div v-if="question.type === 'radio'" class="form-control">
-              <div class="question-label">
-                {{ question.label }}
-              </div>
-              <div
-                v-for="(sublabel, index) in question.sublabels"
-                :key="index"
-                class="question-sublabel"
-              >
-                {{ sublabel }}
-              </div>
+            <AppRadio
+              v-if="question.type === 'radio'"
+              v-model="form[question.model]"
+              :label="question.label"
+              :options="question.options"
+              :error="errors[question.model]"
+              :required="question.required"
+            />
 
-              <div v-for="option in question.options" :key="option.value">
-                <label>
-                  <input
-                    type="radio"
-                    :name="question.model"
-                    :value="option.value"
-                    v-model="form[question.model]"
-                    :required="question.required"
-                  />
-                  {{ option.label }}
-                </label>
-              </div>
-            </div>
-
-            <div v-if="question.type === 'checkbox'" class="form-control">
+            <!-- <div v-if="question.type === 'checkbox'" class="form-control">
               <div class="question-label">
                 {{ question.label }}
               </div>
@@ -465,7 +434,7 @@ const drugQuestions = reactive([
                   </option>
                 </select>
               </div>
-            </div>
+            </div> -->
           </li>
         </div>
 
