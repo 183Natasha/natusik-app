@@ -22,6 +22,7 @@ const emit = defineEmits(["update:modelValue"]);
         {{ sublabel }}
       </div>
     </div>
+    
     <small v-if="error" class="inValid">{{ error }}</small>
     <div v-for="option in options" :key="option.value" class="radio-option">
       <label>

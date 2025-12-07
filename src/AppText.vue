@@ -18,7 +18,7 @@ const updateInput = (event) => {
 </script>
 
 <template>
-  <div class="form-control" :class="{ 'has-error': error }">
+  <div class="form-control" :class="{ inValid: error }">
     <label :for="props.id"> {{ label }}</label>
 
     <input
@@ -34,4 +34,10 @@ const updateInput = (event) => {
 </template>
 
 <style>
+.form-control small {
+  color: red;
+}
+.form-control.inValid input {
+  border-color: red;
+}
 </style>

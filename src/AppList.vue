@@ -388,6 +388,15 @@ const drugQuestions = reactive([
               :required="question.required"
             />
 
+            <AppCheckbox
+              v-if="question.type === 'checkbox'"
+              v-model="form[question.model]"
+              :label="question.label"
+              :options="question.options"
+              :error="errors[question.model]"
+              :required="question.required"
+            />
+
             <!-- <div v-if="question.type === 'checkbox'" class="form-control">
               <div class="question-label">
                 {{ question.label }}
@@ -450,27 +459,14 @@ const drugQuestions = reactive([
               :required="question.required"
             />
 
-            <div v-if="question.type === 'radio'" class="form-control">
-              <div class="question-label">
-                {{ question.label }}
-              </div>
-
-              <div v-for="option in question.options" :key="option.value">
-                <label>
-                  <input
-                    type="radio"
-                    :name="question.model"
-                    :value="option.value"
-                    v-model="form[question.model]"
-                    :required="question.required"
-                  />
-                  {{ option.label }}
-                </label>
-                <small v-if="errors[question.model]">{{
-                  errors[question.model]
-                }}</small>
-              </div>
-            </div>
+            <AppRadio
+              v-if="question.type === 'radio'"
+              v-model="form[question.model]"
+              :label="question.label"
+              :options="question.options"
+              :error="errors[question.model]"
+              :required="question.required"
+            />
           </li>
         </div>
       </ol>
