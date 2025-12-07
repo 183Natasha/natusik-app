@@ -102,6 +102,11 @@ function formIsValid() {
     }
   }
 
+  if (!form.medication) {
+    errors.medication = "Укажите, требовались ли медикаменты";
+    isValid = false;
+  }
+
   if (form.drugName.trim()) {
     if (!form.drugMass.trim()) {
       errors.drugMass = "Введите дозировку препарата";
