@@ -7,14 +7,17 @@ import AppList from "./AppList.vue";
 let currentLogo = ref(cranberryImage);
 let count = ref(0);
 
-watch(count,(newCount) => {
-  if(newCount >=15){
-    currentLogo.value = lemonImage
-  } else{
-    currentLogo.value = cranberryImage
-  }
-})
+const incrementCount = () => {
+  count.value++;
+};
 
+watch(count, (newCount) => {
+  if (newCount >= 15) {
+    currentLogo.value = lemonImage;
+  } else {
+    currentLogo.value = cranberryImage;
+  }
+});
 </script>
 
 <template>
@@ -28,9 +31,9 @@ watch(count,(newCount) => {
     <div>
       <span>
         Количество дней с головной болью - {{ count }}
-        <button @click="count++">Болит голова</button>
+        <!-- <button @click="count++">Болит голова</button> -->
       </span>
-      <AppList />
+      <AppList @headache-alert="incrementCount" />
       <div v-if="count >= 15" class="danger">Хроническая головная боль</div>
     </div>
     <footer>Natusik, 2025</footer>

@@ -6,6 +6,7 @@ import AppSelect from "./AppSelect.vue";
 import AppText from "./AppText.vue";
 import AppDate from "./AppDate.vue";
 
+const emit = defineEmits(["headache-alert"]);
 
 const form = reactive({
   name: "",
@@ -65,6 +66,10 @@ function formIsValid() {
     isValid = false;
   }
 
+  if (form.headacheToday === "no") {
+    return isValid;
+  }
+
   if (form.headacheToday === "yes") {
     let message =
       "* При наличии головной боли это поле обязательно для заполнения";
@@ -113,8 +118,9 @@ function formIsValid() {
     isValid = false;
   }
 
-  if (form.medication ==='yes' && !form.drugName) {
-    errors.medication = "Укажите, подробности по принятым препаратам (вопросы 14-16)";
+  if (form.medication === "yes" && !form.drugName) {
+    errors.medication =
+      "Укажите, подробности по принятым препаратам (вопросы 14-16)";
     isValid = false;
   }
 
@@ -167,6 +173,9 @@ function submitForm() {
 
     console.log("Form Data:", formData);
 
+    if (form.headacheToday === "yes") {
+      emit("headache-alert"); // Отправляем событие родителю
+    }
     //сброс формы
     //сохранение в localStorage
   }
