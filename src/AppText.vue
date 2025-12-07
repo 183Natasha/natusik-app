@@ -6,18 +6,19 @@ const props = defineProps({
   modelValue: String,
   placeholder: String,
   required: Boolean,
-  error: String, 
+  error: String,
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 
 const updateInput = (event) => {
-  emit('update:modelValue', event.target.value);
+  const trimmedValue = event.target.value.trim();
+  emit("update:modelValue", trimmedValue);
 };
 </script>
 
 <template>
-  <div class="form-control" :class="{ 'is-invalid': error }">
+  <div class="form-control" :class="{ 'has-error': error }">
     <label :for="props.id"> {{ label }}</label>
 
     <input

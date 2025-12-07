@@ -349,29 +349,22 @@ const drugQuestions = reactive([
       <ol>
         <!-- Вопросы 1-3 всегда показываются -->
         <li v-for="question in basicQuestions" :key="question.id">
-        
           <AppText
             v-if="question.type === 'text'"
-            v-model="form[question.model]"  
-            :label="question.label"  
+            v-model="form[question.model]"
+            :label="question.label"
             :placeholder="question.placeholder"
-            :error="errors[question.model]"  
+            :error="errors[question.model]"
             :required="question.required"
           />
 
-          <div v-if="question.type === 'date'" class="form-control">
-            <label :for="question.model"> {{ question.label }}</label>
-
-            <input
-              :type="question.type"
-              :id="question.model"
-              v-model.trim="form[question.model]"
-              :required="question.required"
-            />
-            <small v-if="errors[question.model]">{{
-              errors[question.model]
-            }}</small>
-          </div>
+          <AppDate
+            v-if="question.type === 'date'"
+            v-model="form[question.model]"
+            :label="question.label"
+            :error="errors[question.model]"
+            :required="question.required"
+          />
 
           <div v-if="question.type === 'radio'" class="form-control">
             <div class="question-label">
@@ -480,13 +473,13 @@ const drugQuestions = reactive([
         <div v-if="form.medication === 'yes'">
           <li v-for="question in drugQuestions" :key="question.id">
             <AppText
-            v-if="question.type === 'text'"
-            v-model="form[question.model]"  
-            :label="question.label"  
-            :placeholder="question.placeholder"
-            :error="errors[question.model]"  
-            :required="question.required"
-          />
+              v-if="question.type === 'text'"
+              v-model="form[question.model]"
+              :label="question.label"
+              :placeholder="question.placeholder"
+              :error="errors[question.model]"
+              :required="question.required"
+            />
 
             <div v-if="question.type === 'radio'" class="form-control">
               <div class="question-label">
