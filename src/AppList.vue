@@ -6,6 +6,7 @@ import AppSelect from "./AppSelect.vue";
 import AppText from "./AppText.vue";
 import AppDate from "./AppDate.vue";
 
+
 const form = reactive({
   name: "",
   date: "",
@@ -185,7 +186,7 @@ const basicQuestions = reactive([
   {
     id: 3,
     type: "radio",
-    label: "Была ли у Вас сегодня головная боль (ГБ)?",
+    label: "Была ли у Вас сегодня головная боль (ГБ) или аура?",
     model: "headacheToday",
     options: [
       { value: "yes", label: "Да" },
@@ -397,53 +398,14 @@ const drugQuestions = reactive([
               :required="question.required"
             />
 
-            <!-- <div v-if="question.type === 'checkbox'" class="form-control">
-              <div class="question-label">
-                {{ question.label }}
-              </div>
-              <small v-if="errors[question.model]">{{
-                errors[question.model]
-              }}</small>
-              <div v-for="option in question.options" :key="option.value">
-                <label>
-                  <input
-                    type="checkbox"
-                    :value="option.value"
-                    v-model="form[question.model]"
-                    :required="question.required"
-                  />
-                  {{ option.label }}
-                </label>
-                <small v-if="errors[question.model]">{{
-                  errors[question.model]
-                }}</small>
-              </div>
-            </div>
-
-            <div v-if="question.type === 'select'" class="form-control">
-              <label :for="question.model"> {{ question.label }}</label>
-              <small v-if="errors[question.model]">{{
-                errors[question.model]
-              }}</small>
-              <div>
-                <select
-                  :id="question.model"
-                  v-model="form[question.model]"
-                  :required="question.required"
-                >
-                  <option value="" disabled selected>
-                    {{ question.placeholder || "-- Выберите --" }}
-                  </option>
-                  <option
-                    v-for="option in question.options"
-                    :key="option.value"
-                    :value="option.value"
-                  >
-                    {{ option.label }}
-                  </option>
-                </select>
-              </div>
-            </div> -->
+            <AppSelect
+              v-if="question.type === 'select'"
+              v-model="form[question.model]"
+              :label="question.label"
+              :options="question.options"
+              :error="errors[question.model]"
+              :required="question.required"
+            />
           </li>
         </div>
 
