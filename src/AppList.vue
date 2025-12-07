@@ -1,5 +1,10 @@
 <script setup>
 import { reactive } from "vue";
+import AppCheckbox from "./AppCheckbox.vue";
+import AppRadio from "./AppRadio.vue";
+import AppSelect from "./AppSelect.vue";
+import AppText from "./AppText.vue";
+import AppDate from "./AppDate.vue";
 
 const form = reactive({
   name: "",
@@ -344,20 +349,15 @@ const drugQuestions = reactive([
       <ol>
         <!-- Вопросы 1-3 всегда показываются -->
         <li v-for="question in basicQuestions" :key="question.id">
-          <div v-if="question.type === 'text'" class="form-control">
-            <label :for="question.model"> {{ question.label }}</label>
-
-            <input
-              :type="question.type"
-              :id="question.model"
-              v-model.trim="form[question.model]"
-              :placeholder="question.placeholder"
-              :required="question.required"
-            />
-            <small v-if="errors[question.model]">{{
-              errors[question.model]
-            }}</small>
-          </div>
+        
+          <AppText
+            v-if="question.type === 'text'"
+            v-model="form[question.model]"  
+            :label="question.label"  
+            :placeholder="question.placeholder"
+            :error="errors[question.model]"  
+            :required="question.required"
+          />
 
           <div v-if="question.type === 'date'" class="form-control">
             <label :for="question.model"> {{ question.label }}</label>
@@ -479,26 +479,14 @@ const drugQuestions = reactive([
         <!-- Вопросы про препараты (14-16) показываются в случае приема препаратов-->
         <div v-if="form.medication === 'yes'">
           <li v-for="question in drugQuestions" :key="question.id">
-            <div v-if="question.type === 'text'" class="form-control">
-              <label :for="question.model"> {{ question.label }}</label>
-              <small v-if="errors[question.model]">{{
-                errors[question.model]
-              }}</small>
-              <div
-                v-for="(sublabel, index) in question.sublabels"
-                :key="index"
-                class="question-sublabel"
-              >
-                {{ sublabel }}
-              </div>
-              <input
-                :type="question.type"
-                :id="question.model"
-                v-model.trim="form[question.model]"
-                :placeholder="question.placeholder"
-                :required="question.required"
-              />
-            </div>
+            <AppText
+            v-if="question.type === 'text'"
+            v-model="form[question.model]"  
+            :label="question.label"  
+            :placeholder="question.placeholder"
+            :error="errors[question.model]"  
+            :required="question.required"
+          />
 
             <div v-if="question.type === 'radio'" class="form-control">
               <div class="question-label">
