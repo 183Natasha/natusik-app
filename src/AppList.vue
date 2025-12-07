@@ -387,6 +387,7 @@ const drugQuestions = reactive([
               :options="question.options"
               :error="errors[question.model]"
               :required="question.required"
+              :sublabels="question.sublabels"
             />
 
             <AppCheckbox
