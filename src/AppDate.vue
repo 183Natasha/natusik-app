@@ -8,6 +8,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+const updateInput = (event) => {
+  emit("update:modelValue", event.target.value);
+};
 </script>
 
 <template>
@@ -18,7 +21,7 @@ const emit = defineEmits(["update:modelValue"]);
       type="date"
       :id="props.id"
       :value="modelValue"
-      @input="emit('update:modelValue', $event.target.value)"
+      @input="updateInput"
       :required="required"
     />
 
