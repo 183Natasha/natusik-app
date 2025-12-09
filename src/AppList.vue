@@ -151,19 +151,20 @@ function formIsValid() {
 }
 
 function resetForm() {
-  // 1. Определить начальные пустые значения для каждой модели
-  // 2. Пройтись по всем ключам form и установить пустые значения
-  // 3. Очистить errors
-  // 4. Сбросить флаги/состояния, если они есть
-  for (key in form) {
-  /* ... делать что-то с obj[key] ... */
-  if (typeof(key)==='string'){
-    form[key]=''
-  } else if(typeof(key)==='array'){
-    form[key]=[]
+  // console.log(form);
+  for (let key in form) {
+    if (typeof (form[key]) === "string") {
+      form[key] = "";
+    } else if (typeof(form[key]) === "array") {
+      form[key] = [];
+    }
   }
-};
+  // console.log(form);
+  Object.keys(errors).forEach(key => {
+  errors[key] = null;
+});
 }
+
 
 function submitForm() {
   if (formIsValid()) {
@@ -192,7 +193,10 @@ function submitForm() {
       emit("headache-alert", formData); // Отправляем событие родителю
     }
 
-    // resetForm()
+    // function resetForm(){
+    //   form= form()
+    // }
+    resetForm();
     //сброс формы
     //сохранение в localStorage
   }
