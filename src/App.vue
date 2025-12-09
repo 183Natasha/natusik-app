@@ -5,21 +5,42 @@ import lemonImage from "./assets/lemon.svg";
 import AppList from "./AppList.vue";
 
 let currentLogo = ref(cranberryImage);
+
+let count = ref(0);
 let countDays = ref(0);
 let countAura = ref(0);
+let countLocOne = ref(0);
+let countLocTwo = ref(0);
+let countTypePress = ref(0);
+let countTypePuls = ref(0);
 let countNausea = ref(0);
 let countVomiting = ref(0);
 let countLigh = ref(0);
 let countSound = ref(0);
+let countDaysMedication = ref(0);
+let drugsName = ref([]);
 
 const incrementCount = (formData) => {
-  countDays.value++;
-  
-  if (formData.aura === "yes") countAura.value++;
-  if (formData.nausea === "yes") countNausea.value++;
-  if (formData.vomiting === "yes") countVomiting.value++;
-  if (formData.lightSensitivity === "yes") countLigh.value++;
-  if (formData.soundSensitivity === "yes") countSound.value++;
+  count.value++;
+  if (formData.headacheToday === "yes") {
+    if (formData.headacheToday === "yes") countDays.value++;
+    if (formData.aura === "yes") countAura.value++;
+    if (formData.location && formData.location.includes("one")) countLocOne.value++;
+    if (formData.location && formData.location.includes("two")) countLocTwo.value++;
+    
+    if (formData.headacheType && formData.headacheType.includes("press")) countTypePress.value++;
+    if (formData.headacheType && formData.headacheType.includes("puls")) countTypePuls.value++;
+    
+    if (formData.nausea === "yes") countNausea.value++;
+    if (formData.vomiting === "yes") countVomiting.value++;
+    if (formData.lightSensitivity === "yes") countLigh.value++;
+    if (formData.soundSensitivity === "yes") countSound.value++;
+    if (formData.medication === "yes" && formData.drugName.trim()) {
+      countDaysMedication.value++;
+      drugsName.value.push(formData.drugName);
+    }
+    
+  }
 };
 
 watch(countDays, (newCount) => {
@@ -41,16 +62,22 @@ watch(countDays, (newCount) => {
     </header>
     <div>
       <span>
+        Вы ведете данный дневник головной боли {{ count }} дней <br />
         Количество дней с головной болью - {{ countDays }}, из них: <br />
         - с аурой - {{ countAura }} <br />
+        - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo}} <br />
+        - пульсирующая - {{ countTypePuls }}, сжимающая - {{ countTypePress }}<br />
         - с тошнотой - {{ countNausea }} <br />
         - с рвотой - {{ countVomiting }} <br />
-        - сопровождалась чувствительностью: 
-        к свету - {{ countLigh }}, 
-        звуку - {{ countSound }}
+        - сопровождалась чувствительностью: к свету - {{ countLigh }}, звуку -
+        {{ countSound }}
 
         <!-- <button @click="countDays++">Болит голова</button> -->
       </span>
+      <div v-if="drugsName.length > 0">
+        Из них требовало использование лекарственных средств -
+        {{ countDaysMedication }} ({{ drugsName.join(', ') }})
+      </div>
       <AppList @headache-alert="incrementCount" />
       <div v-if="countDays >= 15" class="danger">Хроническая головная боль</div>
     </div>

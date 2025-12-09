@@ -150,6 +150,21 @@ function formIsValid() {
   return isValid;
 }
 
+function resetForm() {
+  // 1. Определить начальные пустые значения для каждой модели
+  // 2. Пройтись по всем ключам form и установить пустые значения
+  // 3. Очистить errors
+  // 4. Сбросить флаги/состояния, если они есть
+  for (key in form) {
+  /* ... делать что-то с obj[key] ... */
+  if (typeof(key)==='string'){
+    form[key]=''
+  } else if(typeof(key)==='array'){
+    form[key]=[]
+  }
+};
+}
+
 function submitForm() {
   if (formIsValid()) {
     const formData = {
@@ -173,17 +188,15 @@ function submitForm() {
 
     console.log("Form Data:", formData);
 
-    if (form.headacheToday === "yes") {
+    if (form.headacheToday) {
       emit("headache-alert", formData); // Отправляем событие родителю
     }
 
-    
+    // resetForm()
     //сброс формы
     //сохранение в localStorage
-    
   }
 }
-
 
 const basicQuestions = reactive([
   {
