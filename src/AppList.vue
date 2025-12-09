@@ -174,12 +174,16 @@ function submitForm() {
     console.log("Form Data:", formData);
 
     if (form.headacheToday === "yes") {
-      emit("headache-alert"); // Отправляем событие родителю
+      emit("headache-alert", formData); // Отправляем событие родителю
     }
+
+    
     //сброс формы
     //сохранение в localStorage
+    
   }
 }
+
 
 const basicQuestions = reactive([
   {

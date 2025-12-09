@@ -5,13 +5,24 @@ import lemonImage from "./assets/lemon.svg";
 import AppList from "./AppList.vue";
 
 let currentLogo = ref(cranberryImage);
-let count = ref(0);
+let countDays = ref(0);
+let countAura = ref(0);
+let countNausea = ref(0);
+let countVomiting = ref(0);
+let countLigh = ref(0);
+let countSound = ref(0);
 
-const incrementCount = () => {
-  count.value++;
+const incrementCount = (formData) => {
+  countDays.value++;
+  
+  if (formData.aura === "yes") countAura.value++;
+  if (formData.nausea === "yes") countNausea.value++;
+  if (formData.vomiting === "yes") countVomiting.value++;
+  if (formData.lightSensitivity === "yes") countLigh.value++;
+  if (formData.soundSensitivity === "yes") countSound.value++;
 };
 
-watch(count, (newCount) => {
+watch(countDays, (newCount) => {
   if (newCount >= 15) {
     currentLogo.value = lemonImage;
   } else {
@@ -30,11 +41,18 @@ watch(count, (newCount) => {
     </header>
     <div>
       <span>
-        Количество дней с головной болью - {{ count }}
-        <!-- <button @click="count++">Болит голова</button> -->
+        Количество дней с головной болью - {{ countDays }}, из них: <br />
+        - с аурой - {{ countAura }} <br />
+        - с тошнотой - {{ countNausea }} <br />
+        - с рвотой - {{ countVomiting }} <br />
+        - сопровождалась чувствительностью: 
+        к свету - {{ countLigh }}, 
+        звуку - {{ countSound }}
+
+        <!-- <button @click="countDays++">Болит голова</button> -->
       </span>
       <AppList @headache-alert="incrementCount" />
-      <div v-if="count >= 15" class="danger">Хроническая головная боль</div>
+      <div v-if="countDays >= 15" class="danger">Хроническая головная боль</div>
     </div>
     <footer>Natusik, 2025</footer>
   </div>
