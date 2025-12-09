@@ -21,6 +21,8 @@ let countSound = ref(0);
 let countDaysMedication = ref(0);
 let drugsName = ref([]);
 
+if (count.value==0){day='дней'}
+
 const incrementCount = (formData) => {
   count.value++;
   if (count.value%10==1 && count.value!=11){
@@ -76,7 +78,7 @@ watch(countDays, (newCount) => {
     </header>
     <div>
       <span>
-        Вы ведете данный дневник головной боли {{ count }} {{ day }} <br />
+        Вы ведете данный дневник головной боли {{ count }} {{ day  }} <br />
         Количество дней с головной болью - {{ countDays }}, из них: <br />
         - с аурой - {{ countAura }} <br />
         - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo }} <br />
