@@ -7,6 +7,7 @@ import AppList from "./AppList.vue";
 let currentLogo = ref(cranberryImage);
 
 let count = ref(0);
+let day = ref('')
 let countDays = ref(0);
 let countAura = ref(0);
 let countLocOne = ref(0);
@@ -22,6 +23,16 @@ let drugsName = ref([]);
 
 const incrementCount = (formData) => {
   count.value++;
+  if (count.value%10==1 && count.value!=11){
+    day='день'
+  }else if (count.value>1 && count.value<=4){
+    day='дня'
+  } else if(count.value>20 && (count.value%10==2 || count.value%10==3 || count.value%10==4)){
+    day='дня'
+  } else {
+    day='дней'
+  }
+
   if (formData.headacheToday === "yes") {
     if (formData.headacheToday === "yes") countDays.value++;
     if (formData.aura === "yes") countAura.value++;
@@ -65,7 +76,7 @@ watch(countDays, (newCount) => {
     </header>
     <div>
       <span>
-        Вы ведете данный дневник головной боли {{ count }} дней <br />
+        Вы ведете данный дневник головной боли {{ count }} {{ day }} <br />
         Количество дней с головной болью - {{ countDays }}, из них: <br />
         - с аурой - {{ countAura }} <br />
         - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo }} <br />
