@@ -25,12 +25,16 @@ const incrementCount = (formData) => {
   if (formData.headacheToday === "yes") {
     if (formData.headacheToday === "yes") countDays.value++;
     if (formData.aura === "yes") countAura.value++;
-    if (formData.location && formData.location.includes("one")) countLocOne.value++;
-    if (formData.location && formData.location.includes("two")) countLocTwo.value++;
-    
-    if (formData.headacheType && formData.headacheType.includes("press")) countTypePress.value++;
-    if (formData.headacheType && formData.headacheType.includes("puls")) countTypePuls.value++;
-    
+    if (formData.location && formData.location.includes("one"))
+      countLocOne.value++;
+    if (formData.location && formData.location.includes("two"))
+      countLocTwo.value++;
+
+    if (formData.headacheType && formData.headacheType.includes("press"))
+      countTypePress.value++;
+    if (formData.headacheType && formData.headacheType.includes("puls"))
+      countTypePuls.value++;
+
     if (formData.nausea === "yes") countNausea.value++;
     if (formData.vomiting === "yes") countVomiting.value++;
     if (formData.lightSensitivity === "yes") countLigh.value++;
@@ -39,7 +43,6 @@ const incrementCount = (formData) => {
       countDaysMedication.value++;
       drugsName.value.push(formData.drugName);
     }
-    
   }
 };
 
@@ -65,21 +68,28 @@ watch(countDays, (newCount) => {
         Вы ведете данный дневник головной боли {{ count }} дней <br />
         Количество дней с головной болью - {{ countDays }}, из них: <br />
         - с аурой - {{ countAura }} <br />
-        - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo}} <br />
-        - пульсирующая - {{ countTypePuls }}, сжимающая - {{ countTypePress }}<br />
+        - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo }} <br />
+        - пульсирующая - {{ countTypePuls }}, сжимающая - {{ countTypePress
+        }}<br />
         - с тошнотой - {{ countNausea }} <br />
         - с рвотой - {{ countVomiting }} <br />
         - сопровождалась чувствительностью: к свету - {{ countLigh }}, звуку -
         {{ countSound }}
 
-        <!-- <button @click="countDays++">Болит голова</button> -->
       </span>
+      <!-- <div>
+        <button @click="countDays++">Болит голова</button>
+      </div>
+       -->
       <div v-if="drugsName.length > 0">
         Из них требовало использование лекарственных средств -
-        {{ countDaysMedication }} ({{ drugsName.join(', ') }})
+        {{ countDaysMedication }} ({{ drugsName.join(", ") }})
+      </div>
+      <div v-if="countDays >= 15" class="danger">
+        У вас отмечается головная боль с частотой более 15 раз в месяц.
+        Требуется посетить невролога
       </div>
       <AppList @headache-alert="incrementCount" />
-      <div v-if="countDays >= 15" class="danger">Хроническая головная боль</div>
     </div>
     <footer>Natusik, 2025</footer>
   </div>
