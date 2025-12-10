@@ -3,11 +3,15 @@ import { ref, watch } from "vue";
 import cranberryImage from "./assets/cranberry.png";
 import lemonImage from "./assets/lemon.svg";
 import AppList from "./AppList.vue";
+// import pluralize from 'pluralize-ru';
 
 let currentLogo = ref(cranberryImage);
 
+let isOpen = ref(true);
+
 let count = ref(0);
-let day = ref('')
+let day = ref("");
+let daysWithAche = ref(0);
 let countDays = ref(0);
 let countAura = ref(0);
 let countLocOne = ref(0);
@@ -21,18 +25,30 @@ let countSound = ref(0);
 let countDaysMedication = ref(0);
 let drugsName = ref([]);
 
-if (count.value==0){day='дней'}
+if (count.value == 0 ||count.value == 1 || (count.value >10 && count.value%10==1) ) {
+  daysWithAche.value = "дней";
+} else{
+  daysWithAche.value = 'дня'
+}
+
+
+if (count.value == 0) {
+  day.value = "дней";
+}
 
 const incrementCount = (formData) => {
   count.value++;
-  if (count.value%10==1 && count.value!=11){
-    day='день'
-  }else if (count.value>1 && count.value<=4){
-    day='дня'
-  } else if(count.value>20 && (count.value%10==2 || count.value%10==3 || count.value%10==4)){
-    day='дня'
+  if (count.value % 10 == 1 && count.value != 11) {
+    day.value = "день";
+  } else if (count.value > 1 && count.value <= 4) {
+    day.value = "дня";
+  } else if (
+    count.value > 20 &&
+    (count.value % 10 == 2 || count.value % 10 == 3 || count.value % 10 == 4)
+  ) {
+    day.value = "дня";
   } else {
-    day='дней'
+    day.value = "дней";
   }
 
   if (formData.headacheToday === "yes") {
@@ -77,19 +93,26 @@ watch(countDays, (newCount) => {
       </div>
     </header>
     <div>
-      <span>
-        Вы ведете данный дневник головной боли {{ count }} {{ day  }} <br />
-        Количество дней с головной болью - {{ countDays }}, из них: <br />
-        - с аурой - {{ countAura }} <br />
-        - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo }} <br />
-        - пульсирующая - {{ countTypePuls }}, сжимающая - {{ countTypePress
-        }}<br />
-        - с тошнотой - {{ countNausea }} <br />
-        - с рвотой - {{ countVomiting }} <br />
-        - сопровождалась чувствительностью: к свету - {{ countLigh }}, звуку -
-        {{ countSound }}
+      <div>
+        Вы ведете данный дневник головной боли {{ count }} {{ day }}
+        <button v-if="count>0" class="btn" @click="isOpen = !isOpen">
+          Показать статистику
+        </button>
 
-      </span>
+        <div v-if="(!isOpen)&& count>0" class="notes">
+          Количество дней с головной болью - {{ countDays }} из {{ count }} {{ daysWithAche }}
+          ведения. Из них: <br />
+          - с аурой - {{ countAura }} <br />
+          - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo }}
+          <br />
+          - пульсирующая - {{ countTypePuls }}, сжимающая - {{ countTypePress
+          }}<br />
+          - с тошнотой - {{ countNausea }} <br />
+          - с рвотой - {{ countVomiting }} <br />
+          - сопровождалась чувствительностью: к свету - {{ countLigh }}, звуку -
+          {{ countSound }}
+        </div>
+      </div>
       <!-- <div>
         <button @click="countDays++">Болит голова</button>
       </div>
