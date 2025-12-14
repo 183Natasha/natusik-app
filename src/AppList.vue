@@ -1,12 +1,12 @@
 <script setup>
-import { reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import AppCheckbox from "./AppCheckbox.vue";
 import AppRadio from "./AppRadio.vue";
 import AppSelect from "./AppSelect.vue";
 import AppText from "./AppText.vue";
 import AppDate from "./AppDate.vue";
 
-const emit = defineEmits(["headache-alert"]);
+const emit = defineEmits(["headache-alert", "form-deleted"]);
 
 const form = reactive({
   name: "",
@@ -26,6 +26,21 @@ const form = reactive({
   location: [],
   headacheType: [],
 });
+
+const allForms = ref([]);
+// console.log("1. Компонент загружается. allForms ДО onMounted:", allForms.value);
+
+onMounted(() => {
+  // console.log("2. onMounted выполнен! Загружаем данные...");
+  const saved = localStorage.getItem("allForms");
+  // console.log("3. В localStorage найдено:", saved);
+  if (saved) {
+    allForms.value = JSON.parse(saved);
+    console.log("4. allForms после загрузки:", allForms.value);
+  }
+});
+
+// console.log("5. Код продолжает выполняться...");
 
 const errors = reactive({
   name: null,
@@ -153,22 +168,34 @@ function formIsValid() {
 function resetForm() {
   // console.log(form);
   for (let key in form) {
-    if (typeof (form[key]) === "string") {
+    if (typeof form[key] === "string") {
       form[key] = "";
-    } else if (typeof(form[key]) === "array") {
+    } else if (typeof form[key] === "array") {
       form[key] = [];
     }
   }
   // console.log(form);
-  Object.keys(errors).forEach(key => {
-  errors[key] = null;
-});
+  Object.keys(errors).forEach((key) => {
+    errors[key] = null;
+  });
 }
 
+// function deleteForm(formId) {
+//   console.log(formId)
+//   allForms.value = allForms.value.filter((item) => item.id !== formId);
+//   localStorage.setItem("allForms", JSON.stringify(allForms.value));
+// }
+function deleteForm(formId) {
+  allForms.value = allForms.value.filter(item => item.id !== formId);
+  localStorage.setItem("allForms", JSON.stringify(allForms.value));
+  emit("form-deleted"); // Отправляем событие о удалении
+};
 
 function submitForm() {
   if (formIsValid()) {
     const formData = {
+      id: Date.now() + '-' + Math.random(), // Генерируем новый уникальный ID при каждой отправке
+      dateForm: new Date().toLocaleDateString(), // Форматируем дату для читаемости
       name: form.name,
       date: form.date,
       intensity: form.intensity,
@@ -193,12 +220,13 @@ function submitForm() {
       emit("headache-alert", formData); // Отправляем событие родителю
     }
 
-    // function resetForm(){
-    //   form= form()
-    // }
+    allForms.value.push(formData);
+
+    localStorage.setItem("allForms", JSON.stringify(allForms.value));
+    console.log("10. Сохранено в localStorage");
+    
+
     resetForm();
-    //сброс формы
-    //сохранение в localStorage
   }
 }
 
@@ -380,6 +408,22 @@ const drugQuestions = reactive([
 </script>
 <template>
   <div class="container">
+    <div class="forms-list" v-if="allForms.length > 0">
+      <div class="header">
+        <h2>Сохраненные формы ({{ allForms.length }})</h2>
+      </div>
+
+      <div class="form-card" v-for="item in allForms" :key="item.id">
+        <div class="form-info">
+          <p><strong>Создано:</strong> {{ item.dateForm }}</p>
+          <p>
+            <small> {{ item }}</small>
+          </p>
+        </div>
+        <button @click="deleteForm(item.id)" class="btn-delete">×</button>
+      </div>
+    </div>
+
     <form class="card" @submit.prevent="submitForm">
       <h2>Список вопросов</h2>
       <ol>
