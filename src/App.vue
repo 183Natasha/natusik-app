@@ -5,14 +5,29 @@ import lemonImage from "./assets/lemon.svg";
 import AppList from "./AppList.vue";
 // import pluralize from 'pluralize-ru';
 
+const getLocalStorageCount = () => {
+   try {
+    const savedForms = localStorage.getItem("allForms");
+    if (savedForms) {
+      const formsArray = JSON.parse(savedForms);
+      // Проверяем, что это массив и возвращаем его длину
+      return Array.isArray(formsArray) ? formsArray.length : 0;
+    }
+  } catch (error) {
+    console.error("Ошибка при чтении из LocalStorage:", error);
+  }
+  return 0;
+};
+
+
 let currentLogo = ref(cranberryImage);
 
-let isOpen = ref(true);
+let isOpen = ref(true)
 
-let count = ref(0);
+let count = ref(getLocalStorageCount()); // кол-во дней ведения дневника
 let day = ref("");
-let daysWithAche = ref(0);
-let countDays = ref(0);
+let daysWithAche = ref(0); // из count ДНЕЙ ведения
+let countDays = ref(0); // кол-во дней с головной болью
 let countAura = ref(0);
 let countLocOne = ref(0);
 let countLocTwo = ref(0);
@@ -25,19 +40,27 @@ let countSound = ref(0);
 let countDaysMedication = ref(0);
 let drugsName = ref([]);
 
-if (count.value == 0 ||count.value == 1 || (count.value >10 && count.value%10==1) ) {
-  daysWithAche.value = "дней";
-} else{
-  daysWithAche.value = 'дня'
-}
+// const checkCount = () => {
+//   count.value = getLocalStorageCount();
+//   updateDayText();
+// };
 
+// if (
+//   count.value == 0 ||
+//   // count.value == 1 ||
+//   (count.value > 10 && count.value % 10 == 1)
+// ) {
+//   daysWithAche.value = "дней";
+// } else {
+//   daysWithAche.value = "дня";
+// }
 
-if (count.value == 0) {
-  day.value = "дней";
-}
+// if (count.value == 0) {
+//   day.value = "дней";
+// }
 
-const incrementCount = (formData) => {
-  count.value++;
+const updateDayText = () => {
+  // Логика для day (сколько дней ведете дневник)
   if (count.value % 10 == 1 && count.value != 11) {
     day.value = "день";
   } else if (count.value > 1 && count.value <= 4) {
@@ -50,6 +73,45 @@ const incrementCount = (formData) => {
   } else {
     day.value = "дней";
   }
+  
+  // Логика для daysWithAche (дней с головной болью)
+  // if (
+  //   count.value == 0 ||
+  //   count.value % 10 == 1 && count.value != 11
+  // ) {
+  //   daysWithAche.value = "дней";
+  // } else {
+  //   daysWithAche.value = "дня";
+  // }
+
+ if (
+    count.value % 10 == 1 
+  ) {
+    daysWithAche.value = "дня";
+  } else {
+    daysWithAche.value = "дней";
+  }
+};
+
+updateDayText()
+
+const incrementCount = (formData) => {
+  // count.value++;
+  count.value = getLocalStorageCount();
+  updateDayText()
+
+  // if (count.value % 10 == 1 && count.value != 11) {
+  //   day.value = "день";
+  // } else if (count.value > 1 && count.value <= 4) {
+  //   day.value = "дня";
+  // } else if (
+  //   count.value > 20 &&
+  //   (count.value % 10 == 2 || count.value % 10 == 3 || count.value % 10 == 4)
+  // ) {
+  //   day.value = "дня";
+  // } else {
+  //   day.value = "дней";
+  // }
 
   if (formData.headacheToday === "yes") {
     if (formData.headacheToday === "yes") countDays.value++;
@@ -75,6 +137,8 @@ const incrementCount = (formData) => {
   }
 };
 
+
+
 watch(countDays, (newCount) => {
   if (newCount >= 15) {
     currentLogo.value = lemonImage;
@@ -95,13 +159,13 @@ watch(countDays, (newCount) => {
     <div>
       <div>
         Вы ведете данный дневник головной боли {{ count }} {{ day }}
-        <button v-if="count>0" class="btn" @click="isOpen = !isOpen">
+        <button v-if="count > 0" class="btn" @click="isOpen = !isOpen">
           Показать статистику
         </button>
 
-        <div v-if="(!isOpen)&& count>0" class="notes">
-          Количество дней с головной болью - {{ countDays }} из {{ count }} {{ daysWithAche }}
-          ведения. Из них: <br />
+        <div v-if="!isOpen && count > 0" class="notes" >
+          Количество дней с головной болью - {{ countDays }} из {{ count }}
+          {{ daysWithAche }} ведения. Из них: <br />
           - с аурой - {{ countAura }} <br />
           - с одной стороны - {{ countLocOne }}, с двух - {{ countLocTwo }}
           <br />
@@ -125,7 +189,7 @@ watch(countDays, (newCount) => {
         У вас отмечается головная боль с частотой более 15 раз в месяц.
         Требуется посетить невролога
       </div>
-      <AppList @headache-alert="incrementCount" />
+      <AppList @headache-alert="incrementCount" @form-deleted="incrementCount" :update-count="incrementCount" />
     </div>
     <footer>Natusik, 2025</footer>
   </div>

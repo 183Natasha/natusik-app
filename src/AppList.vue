@@ -8,6 +8,10 @@ import AppDate from "./AppDate.vue";
 
 const emit = defineEmits(["headache-alert", "form-deleted"]);
 
+const props = defineProps({
+  updateCount: Function
+});
+
 const form = reactive({
   name: "",
   date: "",
@@ -186,15 +190,15 @@ function resetForm() {
 //   localStorage.setItem("allForms", JSON.stringify(allForms.value));
 // }
 function deleteForm(formId) {
-  allForms.value = allForms.value.filter(item => item.id !== formId);
+  allForms.value = allForms.value.filter((item) => item.id !== formId);
   localStorage.setItem("allForms", JSON.stringify(allForms.value));
   emit("form-deleted"); // Отправляем событие о удалении
-};
+}
 
 function submitForm() {
   if (formIsValid()) {
     const formData = {
-      id: Date.now() + '-' + Math.random(), // Генерируем новый уникальный ID при каждой отправке
+      id: Date.now() + "-" + Math.random(), // Генерируем новый уникальный ID при каждой отправке
       dateForm: new Date().toLocaleDateString(), // Форматируем дату для читаемости
       name: form.name,
       date: form.date,
@@ -216,19 +220,28 @@ function submitForm() {
 
     console.log("Form Data:", formData);
 
-    if (form.headacheToday) {
-      emit("headache-alert", formData); // Отправляем событие родителю
-    }
-
     allForms.value.push(formData);
 
     localStorage.setItem("allForms", JSON.stringify(allForms.value));
     console.log("10. Сохранено в localStorage");
-    
+
+    if (form.headacheToday) {
+      emit("headache-alert", formData); // Отправляем событие родителю
+    }
 
     resetForm();
   }
 }
+
+
+
+const clearAllForms = () => {
+  if (alert("Удалить все формы?")) {
+    allForms.value = [];
+    localStorage.removeItem("allForms");
+    props.updateCount();
+  }
+}; 
 
 const basicQuestions = reactive([
   {
@@ -411,6 +424,7 @@ const drugQuestions = reactive([
     <div class="forms-list" v-if="allForms.length > 0">
       <div class="header">
         <h2>Сохраненные формы ({{ allForms.length }})</h2>
+        <button @click="clearAllForms" class="btn-clear">Очистить все</button>
       </div>
 
       <div class="form-card" v-for="item in allForms" :key="item.id">
