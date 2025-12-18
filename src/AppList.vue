@@ -9,7 +9,7 @@ import AppDate from "./AppDate.vue";
 const emit = defineEmits(["headache-alert", "form-deleted"]);
 
 const props = defineProps({
-  updateCount: Function
+  updateCount: Function,
 });
 
 const form = reactive({
@@ -233,15 +233,13 @@ function submitForm() {
   }
 }
 
-
-
 const clearAllForms = () => {
-  if (alert("Удалить все формы?")) {
+  if (confirm("Удалить все формы?")) {
     allForms.value = [];
     localStorage.removeItem("allForms");
     props.updateCount();
   }
-}; 
+};
 
 const basicQuestions = reactive([
   {
@@ -431,7 +429,12 @@ const drugQuestions = reactive([
         <div class="form-info">
           <p><strong>Создано:</strong> {{ item.dateForm }}</p>
           <p>
-            <small> {{ item }}</small>
+            <small>
+              У вас в данный день болела голова? -
+              <strong>
+                {{ item.headacheToday === "yes" ? "Да" : "Нет" }}
+              </strong>
+            </small>
           </p>
         </div>
         <button @click="deleteForm(item.id)" class="btn-delete">×</button>
