@@ -57,13 +57,13 @@ const checkCount = () => {
       count.value = getLocalStorageCount();
 
       // Проверяем на хроническую головную боль
-      if (arrayLength >= 30) {
+      if (arrayLength >= 2) {
         const last30Days = formsArray.slice(-30);
         const headacheDays = last30Days.filter(
           (item) => item.headacheToday === "yes"
         ).length;
 
-        if (headacheDays >= 15) {
+        if (headacheDays >= 1) {
           chronicWarning.value =
             "Голова болела чаще 15 дней за последние 30 дней. Хроническая головная боль!";
         }
