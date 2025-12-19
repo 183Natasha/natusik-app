@@ -12,7 +12,7 @@ const props = defineProps({
   updateCount: Function,
 });
 
-const form = reactive({
+const initialFormState = {
   name: "",
   date: "",
   intensity: "",
@@ -29,7 +29,9 @@ const form = reactive({
   drugEffect: "",
   location: [],
   headacheType: [],
-});
+};
+
+let form = reactive({...initialFormState})
 
 const allForms = ref([]);
 // console.log("1. Компонент загружается. allForms ДО onMounted:", allForms.value);
@@ -170,25 +172,14 @@ function formIsValid() {
 }
 
 function resetForm() {
-  // console.log(form);
-  for (let key in form) {
-    if (typeof form[key] === "string") {
-      form[key] = "";
-    } else if (typeof form[key] === "array") {
-      form[key] = [];
-    }
-  }
-  // console.log(form);
+  Object.assign(form, initialFormState);
+  
   Object.keys(errors).forEach((key) => {
     errors[key] = null;
   });
 }
 
-// function deleteForm(formId) {
-//   console.log(formId)
-//   allForms.value = allForms.value.filter((item) => item.id !== formId);
-//   localStorage.setItem("allForms", JSON.stringify(allForms.value));
-// }
+
 function deleteForm(formId) {
   allForms.value = allForms.value.filter((item) => item.id !== formId);
   localStorage.setItem("allForms", JSON.stringify(allForms.value));
