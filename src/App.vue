@@ -51,9 +51,10 @@ const checkCount = () => {
         count.value = 0;
         return;
       }
+      
 
       const arrayLength = formsArray.length;
-       count.value = getLocalStorageCount(); 
+      count.value = getLocalStorageCount();
 
       // Проверяем на хроническую головную боль
       if (arrayLength >= 30) {
@@ -76,8 +77,6 @@ const checkCount = () => {
   }
   updateDayText();
 };
-
-
 
 const updateDayText = () => {
   // Логика для day (сколько дней ведете дневник)
@@ -103,14 +102,14 @@ const updateDayText = () => {
 };
 
 updateDayText();
-checkCount()
+checkCount();
 
 const incrementCount = (formData) => {
   checkCount();
   count.value = getLocalStorageCount();
   updateDayText();
 
-  if (formData.headacheToday === "yes") {
+  if (formData && formData.headacheToday === "yes") {
     if (formData.headacheToday === "yes") countDays.value++;
     if (formData.aura === "yes") countAura.value++;
     if (formData.location && formData.location.includes("one"))

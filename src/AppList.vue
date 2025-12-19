@@ -31,7 +31,7 @@ const initialFormState = {
   headacheType: [],
 };
 
-let form = reactive({...initialFormState})
+let form = reactive({ ...initialFormState });
 
 const allForms = ref([]);
 // console.log("1. Компонент загружается. allForms ДО onMounted:", allForms.value);
@@ -173,12 +173,11 @@ function formIsValid() {
 
 function resetForm() {
   Object.assign(form, initialFormState);
-  
+
   Object.keys(errors).forEach((key) => {
     errors[key] = null;
   });
 }
-
 
 function deleteForm(formId) {
   allForms.value = allForms.value.filter((item) => item.id !== formId);
@@ -211,7 +210,33 @@ function submitForm() {
 
     console.log("Form Data:", formData);
 
-    allForms.value.push(formData);
+    const savedForms = localStorage.getItem("allForms");
+    if (savedForms) {
+      const formsArray = JSON.parse(savedForms);
+      if (Array.isArray(formsArray)) {
+        // Ищем запись с такой же датой (form.date, а не dateForm!)
+        const existingEntry = formsArray.find(
+          (item) => item.date === formData.date
+        );
+
+        if (existingEntry) {
+          alert(
+            `Дневник за ${new Date(form.date).toLocaleDateString(
+              "ru"
+            )} уже создан!`
+          );
+          return;
+        }
+        // Если дубликата нет, добавляем
+        allForms.value.push(formData);
+      } else {
+        // Если это не массив, начинаем новый
+        allForms.value = [formData];
+      }
+    } else {
+      // Если localStorage пустой, создаем первый элемент
+      allForms.value = [formData];
+    }
 
     localStorage.setItem("allForms", JSON.stringify(allForms.value));
     console.log("10. Сохранено в localStorage");
@@ -227,9 +252,11 @@ function submitForm() {
 const clearAllForms = () => {
   if (confirm("Удалить все формы?")) {
     allForms.value = [];
+    Object.assign(form, initialFormState);
     localStorage.removeItem("allForms");
     props.updateCount();
   }
+  
 };
 
 const basicQuestions = reactive([
@@ -418,7 +445,10 @@ const drugQuestions = reactive([
 
       <div class="form-card" v-for="item in allForms" :key="item.id">
         <div class="form-info">
-          <p><strong>Создано:</strong> {{ item.dateForm }}</p>
+          <p>
+            <strong>Запись создана:</strong>
+            {{ new Date(item.date).toLocaleDateString("ru") }}
+          </p>
           <p>
             <small>
               У вас в данный день болела голова? -
