@@ -13,7 +13,7 @@ const props = defineProps({
 });
 
 const initialFormState = {
-  name: "",
+  // name: "",
   date: "",
   intensity: "",
   headacheToday: "",
@@ -51,7 +51,7 @@ onMounted(() => {
 // console.log("5. Код продолжает выполняться...");
 
 const errors = reactive({
-  name: null,
+  // name: null,
   date: null,
   intensity: null,
   headacheToday: null,
@@ -74,10 +74,10 @@ function formIsValid() {
 
   Object.keys(errors).forEach((key) => (errors[key] = null));
 
-  if (!form.name.trim()) {
-    errors.name = "Введите ваше имя";
-    isValid = false;
-  }
+  // if (!form.name.trim()) {
+  //   errors.name = "Введите ваше имя";
+  //   isValid = false;
+  // }
 
   if (!form.date) {
     errors.date = "Выберите дату";
@@ -88,7 +88,7 @@ function formIsValid() {
     const [year, month, day] = form.date.split("-").map(Number);
     const timestamp = new Date(year, month - 1, day).getTime();
     if (timestamp > new Date()) {
-      errors.date = "Нельзя создавать заметку из будущего";
+      errors.date = "Некорректный ввод даты: указанная дата еще не наступила";
       isValid = false;
     }
   }
@@ -201,7 +201,7 @@ function submitForm() {
     const formData = {
       id: Date.now() + "-" + Math.random(), // Генерируем новый уникальный ID при каждой отправке
       dateForm: new Date().toLocaleDateString(), // Форматируем дату для читаемости
-      name: form.name,
+      // name: form.name,
       date: form.date,
       intensity: form.intensity,
       headacheToday: form.headacheToday,
@@ -270,14 +270,14 @@ const clearAllForms = () => {
 };
 
 const basicQuestions = reactive([
-  {
-    id: 1,
-    type: "text",
-    label: "Как тебя зовут?",
-    model: "name",
-    placeholder: "Введите имя",
-    required: true,
-  },
+  // {
+  //   id: 1,
+  //   type: "text",
+  //   label: "Как тебя зовут?",
+  //   model: "name",
+  //   placeholder: "Введите имя",
+  //   required: true,
+  // },
   {
     id: 2,
     type: "date",
