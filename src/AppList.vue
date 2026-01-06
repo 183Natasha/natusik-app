@@ -556,11 +556,252 @@ const drugQuestions = reactive([
   </div>
 </template>
 
-<style scoped>
+<!-- <style scoped>
 .form-control small {
   color: red;
 }
 .form-control.inValid input {
   border-color: red;
 }
-</style> 
+</style>  -->
+
+<style scoped>
+.container {
+  --soft-pink: #ffebee;
+  --light-pink: #fce4ec;
+  --pink-accent: #f48fb1;
+  --mint-green: #c8e6c9;
+  --light-mint: #e8f5e9;
+  --dark-mint: #81c784;
+  --text-dark: #5d4037;
+  --text-light: #795548;
+  --white: #ffffff;
+  --shadow: rgba(244, 143, 177, 0.2);
+  --border-color: rgba(244, 143, 177, 0.3);
+}
+
+/* Список сохраненных форм */
+.forms-list {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+}
+
+.forms-list .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--light-mint);
+}
+
+.forms-list h2 {
+  color: var(--pink-accent);
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Кнопка очистки всех форм */
+.btn-clear {
+  background-color: var(--light-pink);
+  color: var(--text-dark);
+  border: 1px solid var(--pink-accent);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+  background-color: var(--pink-accent);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+/* Карточка отдельной формы */
+.form-card {
+  background-color: var(--light-mint);
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid var(--mint-green);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.form-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-info p {
+  margin: 5px 0;
+  color: var(--text-dark);
+}
+
+.form-info strong {
+  color: var(--text-light);
+}
+
+.form-info small {
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+/* Кнопка удаления отдельной формы */
+.btn-delete {
+  background-color: transparent;
+  color: var(--pink-accent);
+  border: 2px solid var(--pink-accent);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: var(--pink-accent);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Форма для ввода данных */
+.card {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 15px var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.card h2 {
+  color: var(--pink-accent);
+  margin-top: 0;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--light-mint);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Список вопросов */
+ol {
+  padding-left: 20px;
+  margin-bottom: 30px;
+}
+
+ol li {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+ol li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Кнопка отправки формы */
+.btn {
+  background-color: var(--mint-green);
+  color: var(--text-dark);
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 20px auto 0;
+  width: fit-content;
+}
+
+.btn:hover {
+  background-color: var(--dark-mint);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Стили для условных блоков */
+div[v-if="form.headacheToday === 'yes'"],
+div[v-if="form.medication === 'yes'"] {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--light-mint);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .forms-list,
+  .card {
+    padding: 20px;
+  }
+  
+  .forms-list .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .form-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .btn-delete {
+    align-self: flex-end;
+  }
+}
+
+/* Стили для ошибок (уже есть в вашем коде) */
+.form-control small {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+}
+
+.form-control.inValid input,
+.form-control.inValid select,
+.form-control.inValid textarea {
+  border-color: #d32f2f;
+  background-color: #ffebee;
+}
+</style>

@@ -262,7 +262,8 @@ const incrementCount = (formData) => {
   </div>
 </template>
 
-<style scoped>
+<!-- <style scoped>
+  
 .danger {
   color: red;
   font-weight: bold;
@@ -280,5 +281,184 @@ const incrementCount = (formData) => {
 .header_logo {
   display: flex;
   gap: 10px;
+}
+</style> -->
+<style scoped>
+/* Убрать :root из scoped стилей и использовать обычные переменные */
+.app {
+  --soft-pink: #ffebee;      /* Нежно-розовый фон */
+  --light-pink: #fce4ec;     /* Светло-розовый */
+  --pink-accent: #f48fb1;    /* Розовый акцент */
+  --mint-green: #c8e6c9;     /* Салатный/мятный */
+  --light-mint: #e8f5e9;     /* Светло-салатный */
+  --dark-mint: #81c784;      /* Темно-салатный */
+  --text-dark: #5d4037;      /* Темный текст */
+  --text-light: #795548;     /* Светлый текст */
+  --white: #ffffff;
+  --shadow: rgba(244, 143, 177, 0.2);
+  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-dark);
+  background: linear-gradient(135deg, var(--soft-pink) 0%, var(--light-mint) 100%);
+  min-height: 100vh;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+/* Header стили */
+header {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 20px 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px var(--shadow);
+  border-left: 5px solid var(--pink-accent);
+}
+
+.header_logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  padding: 5px;
+  background-color: var(--light-mint);
+  border: 2px solid var(--dark-mint);
+  object-fit: contain;
+}
+
+h1 {
+  color: var(--pink-accent);
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Основной контентный блок */
+.app > div {
+  background-color: var(--white);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Первый div внутри основного контента */
+.app > div > div:first-child {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: var(--text-light);
+}
+
+/* Кнопка */
+.btn {
+  background-color: var(--mint-green);
+  color: var(--text-dark);
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0 15px 10px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+}
+
+.btn:hover {
+  background-color: var(--dark-mint);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Блок статистики */
+.notes {
+  background-color: var(--light-pink);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px 0;
+  border-left: 4px solid var(--mint-green);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Блок лекарств */
+div + div[v-if="drugsName.length > 0"] {
+  background-color: var(--light-mint);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  border: 1px dashed var(--dark-mint);
+}
+
+/* Предупреждение */
+.danger {
+  color: #d32f2f;
+  background-color: #ffebee;
+  border: 2px solid #ffcdd2;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-weight: bold;
+  box-shadow: 0 3px 10px rgba(211, 47, 47, 0.1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Footer */
+footer {
+  margin-top: 30px;
+  padding-top: 20px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 14px;
+  border-top: 1px solid rgba(244, 143, 177, 0.3);
+}
+
+/* Переносы строк в статистике */
+.notes br {
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .app {
+    padding: 15px;
+  }
+  
+  header {
+    padding: 15px 20px;
+  }
+  
+  h1 {
+    font-size: 20px;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .app > div {
+    padding: 20px;
+  }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
