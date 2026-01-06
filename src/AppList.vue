@@ -84,6 +84,15 @@ function formIsValid() {
     isValid = false;
   }
 
+  if (form.date) {
+    const [year, month, day] = form.date.split("-").map(Number);
+    const timestamp = new Date(year, month - 1, day).getTime();
+    if (timestamp > new Date()) {
+      errors.date = "Нельзя создавать заметку из будущего";
+      isValid = false;
+    }
+  }
+
   if (!form.headacheToday) {
     errors.headacheToday = "Ответьте на этот вопрос";
     isValid = false;
