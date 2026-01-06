@@ -452,7 +452,7 @@ const drugQuestions = reactive([
         <h2>Сохраненные формы ({{ allForms.length }})</h2>
         <button @click="clearAllForms" class="btn-clear">Очистить все</button>
         <button @click="isOpenHistory = !isOpenHistory" class="btn-history">
-          Показать историю записей
+           {{ isOpen ? 'Показать историю записей' : 'Скрыть историю записей' }}
         </button>
       </div>
       <template v-if="!isOpenHistory">
@@ -642,6 +642,7 @@ const drugQuestions = reactive([
 .btn-history {
   background-color: var(--mint-green);
   color: var(--text-dark);
+  border: 1px solid var(--text-dark);
   border: none;
   padding: 8px 16px;
   border-radius: 20px;
@@ -651,7 +652,7 @@ const drugQuestions = reactive([
 }
 
 .btn-history:hover {
-  background-color: var(--pink-accent);
+  background-color: var(--dark-mint);
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px var(--shadow);

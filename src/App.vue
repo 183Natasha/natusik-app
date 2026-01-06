@@ -222,7 +222,7 @@ const incrementCount = (formData) => {
       <div>
         Вы ведете данный дневник головной боли {{ count }} {{ day }}
         <button v-if="count > 0" class="btn" @click="isOpen = !isOpen">
-          Показать статистику
+           {{ isOpen ? 'Показать статистику' : 'Скрыть статистику' }}
         </button>
 
         <div v-if="!isOpen && count > 0" class="notes">
