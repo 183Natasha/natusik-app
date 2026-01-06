@@ -33,6 +33,8 @@ const initialFormState = {
 
 let form = reactive({ ...initialFormState });
 
+let isOpenHistory = ref(true);
+
 const allForms = ref([]);
 // console.log("1. Компонент загружается. allForms ДО onMounted:", allForms.value);
 
@@ -256,7 +258,6 @@ const clearAllForms = () => {
     localStorage.removeItem("allForms");
     props.updateCount();
   }
-  
 };
 
 const basicQuestions = reactive([
@@ -441,25 +442,29 @@ const drugQuestions = reactive([
       <div class="header">
         <h2>Сохраненные формы ({{ allForms.length }})</h2>
         <button @click="clearAllForms" class="btn-clear">Очистить все</button>
+        <button @click="isOpenHistory = !isOpenHistory" class="btn-history">
+          Показать историю записей
+        </button>
       </div>
-
-      <div class="form-card" v-for="item in allForms" :key="item.id">
-        <div class="form-info">
-          <p>
-            <strong>Запись создана:</strong>
-            {{ new Date(item.date).toLocaleDateString("ru") }}
-          </p>
-          <p>
-            <small>
-              У вас в данный день болела голова? -
-              <strong>
-                {{ item.headacheToday === "yes" ? "Да" : "Нет" }}
-              </strong>
-            </small>
-          </p>
+      <template v-if="!isOpenHistory">
+        <div class="form-card" v-for="item in allForms" :key="item.id">
+          <div class="form-info">
+            <p>
+              <strong>Запись создана:</strong>
+              {{ new Date(item.date).toLocaleDateString("ru") }}
+            </p>
+            <p>
+              <small>
+                У вас в данный день болела голова? -
+                <strong>
+                  {{ item.headacheToday === "yes" ? "Да" : "Нет" }}
+                </strong>
+              </small>
+            </p>
+          </div>
+          <button @click="deleteForm(item.id)" class="btn-delete">×</button>
         </div>
-        <button @click="deleteForm(item.id)" class="btn-delete">×</button>
-      </div>
+      </template>
     </div>
 
     <form class="card" @submit.prevent="submitForm">
@@ -625,6 +630,24 @@ const drugQuestions = reactive([
   box-shadow: 0 4px 8px var(--shadow);
 }
 
+.btn-history {
+  background-color: var(--mint-green);
+  color: var(--text-dark);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-history:hover {
+  background-color: var(--pink-accent);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
 /* Карточка отдельной формы */
 .form-card {
   background-color: var(--light-mint);
@@ -767,24 +790,24 @@ div[v-if="form.medication === 'yes'"] {
   .container {
     padding: 10px;
   }
-  
+
   .forms-list,
   .card {
     padding: 20px;
   }
-  
+
   .forms-list .header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  
+
   .form-card {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
-  
+
   .btn-delete {
     align-self: flex-end;
   }
