@@ -452,7 +452,7 @@ const drugQuestions = reactive([
         <h2>Сохраненные формы ({{ allForms.length }})</h2>
         <button @click="clearAllForms" class="btn-clear">Очистить все</button>
         <button @click="isOpenHistory = !isOpenHistory" class="btn-history">
-           {{ isOpen ? 'Показать историю записей' : 'Скрыть историю записей' }}
+           {{ isOpenHistory ? 'Показать историю записей' : 'Скрыть историю записей' }}
         </button>
       </div>
       <template v-if="!isOpenHistory">
