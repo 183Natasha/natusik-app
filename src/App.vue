@@ -3,14 +3,12 @@ import { ref, watch, onMounted } from "vue";
 import cranberryImage from "./assets/cranberry.png";
 import lemonImage from "./assets/lemon.svg";
 import AppList from "./AppList.vue";
-// import pluralize from 'pluralize-ru';
 
 const getLocalStorageCount = () => {
   try {
     const savedForms = localStorage.getItem("allForms");
     if (savedForms) {
       const formsArray = JSON.parse(savedForms);
-      // Проверяем, что это массив и возвращаем его длину
       return Array.isArray(formsArray) ? formsArray.length : 0;
     }
   } catch (error) {

@@ -41,10 +41,32 @@ const emit = defineEmits(["update:modelValue"]);
 </template>
 
 <style  >
-.form-control small {
+/* .form-control small {
   color: red;
 }
 .form-control.inValid input {
   border-color: red;
+} */
+
+.form-control {
+  margin-bottom: 20px; /* Отступ снизу */
+}
+
+.question-label {
+  display: block;
+  margin-bottom: 8px; /* Отступ между label и input */
+  font-weight: 500;
+  color: #5d4037; /* Цвет из вашей палитры */
+}
+
+.label{
+  color: #f48fb1
+}
+
+small {
+  color: #f48fb1;
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
 }
 </style>
