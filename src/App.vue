@@ -121,7 +121,7 @@ const checkCount = () => {
         (item) => item.headacheToday === "yes"
       ).length;
 
-      if (headacheDays >= 1) {
+      if (headacheDays >= 15) {
         currentLogo.value = lemonImage;
         chronicWarning.value =
           "Голова болела чаще 15 дней за последние 30 дней. Хроническая головная боль!";
