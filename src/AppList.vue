@@ -103,7 +103,7 @@ function formIsValid() {
 
   if (form.headacheToday === "yes") {
     let message =
-      "* При наличии головной боли это поле обязательно для заполнения";
+      "⚠️ При наличии головной боли это поле обязательно для заполнения";
 
     if (!form.aura) {
       errors.aura = message;
@@ -145,28 +145,28 @@ function formIsValid() {
   }
 
   if (!form.medication) {
-    errors.medication = "Укажите, требовались ли медикаменты";
+    errors.medication = "⚠️ Укажите, требовались ли медикаменты";
     isValid = false;
   } else if (form.medication === "yes") {
     // Если выбрано "Да", проверяем поля про препараты
     if (!form.drugName || !form.drugName.trim()) {
-      errors.drugName = "Введите название препарата";
+      errors.drugName = "⚠️ Введите название препарата";
       isValid = false;
     }
 
     if (!form.drugMass || !form.drugMass.trim()) {
-      errors.drugMass = "Введите дозировку препарата";
+      errors.drugMass = "⚠️ Введите дозировку препарата";
       isValid = false;
     } else {
       const mass = Number(form.drugMass);
       if (isNaN(mass) || mass <= 0) {
-        errors.drugMass = "Введите корректную дозировку (число > 0)";
+        errors.drugMass = "⚠️ Введите корректную дозировку (число > 0)";
         isValid = false;
       }
     }
 
     if (!form.drugEffect) {
-      errors.drugEffect = "Оцените эффект препарата";
+      errors.drugEffect = "⚠️ Оцените эффект препарата";
       isValid = false;
     }
   }
@@ -1001,10 +1001,6 @@ div[v-if="form.medication === 'yes'"] {
   text-decoration: underline;
 }
 
-.dark-theme .form-control small {
-  color: var(--pink-accent-1);
-  text-decoration: underline;
-}
 
 .dark-theme .eye,
 .dark-theme .trash {

@@ -42,4 +42,11 @@ const updateInput = (event) => {
   background-color: var(--light-mint);
 }
 
+label {
+  display: block;
+  margin-bottom: 8px; /* Отступ между label и input */
+  font-weight: 500;
+  color: var(--pink-accent-1)
+}
+
 </style>
