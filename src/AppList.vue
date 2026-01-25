@@ -38,7 +38,7 @@ let form = reactive({ ...initialFormState });
 let isOpenHistory = ref(true);
 let isFormSaved = ref(false);
 
-const allForms = ref([]);
+const allForms = ref(new Set());
 
 onMounted(() => {
   const saved = localStorage.getItem("allForms");
@@ -183,9 +183,197 @@ function resetForm() {
 }
 
 function deleteForm(formId) {
-  allForms.value = allForms.value.filter((item) => item.id !== formId);
-  localStorage.setItem("allForms", JSON.stringify(allForms.value));
-  emit("form-deleted"); // Отправляем событие о удалении
+  const formToDelete = allForms.value.find((item) => item.id === formId);
+
+  console.log("Дата за которое число удаляем" + formToDelete.date);
+  const dateToDelete = new Date(formToDelete.date + "T00:00:00Z");
+  console.log("Дата за которе удаляем 2date- " + dateToDelete);
+
+  const featureDay1 = dateToDelete.setDate(dateToDelete.getDate() + 1);
+  console.log("1" + new Date(featureDay1).toLocaleString());
+  const featureDay2 = dateToDelete.setDate(dateToDelete.getDate() + 1);
+  console.log("2" + new Date(featureDay2).toLocaleString());
+  const featureDay3 = dateToDelete.setDate(dateToDelete.getDate() + 1);
+  console.log("3" + new Date(featureDay3).toLocaleString());
+
+  const today = new Date();
+  const dif = today - featureDay1;
+  // today.setHours(0, 0, 0, 0);
+  // console.log(today)
+
+  // yesterday.setDate(yesterday.getDate() - 1)
+  if (dif > 172800000) {
+    alert("Вы не можете удалить запись за данный день");
+  } else {
+    allForms.value = allForms.value.filter((item) => item.id !== formId);
+
+    localStorage.setItem("allForms", JSON.stringify(allForms.value));
+    emit("form-deleted"); // Отправляем событие о удалении
+  }
+}
+
+function  missedDay() {
+  // 1. Исправлено: используем локальное время для today
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let savedForms = localStorage.getItem("allForms");
+  if (!savedForms) return;
+  let formsArray = JSON.parse(savedForms);
+  console.log(formsArray);
+
+  let allDays = [];
+  formsArray.forEach((el) => {
+    allDays.push(el.date);
+  });
+  console.log(allDays);
+
+  if (!Array.isArray(formsArray) || formsArray.length === 0) {
+    return;
+  }
+
+  const sortedForms = [...formsArray].sort((a, b) =>
+    a.date.localeCompare(b.date)
+  );
+
+  let firstForm = sortedForms[0];
+  console.log("Первая форма:", firstForm.date);
+  const firstDay = new Date(firstForm.date + "T00:00:00");
+
+
+  const difFirstDayAndToday = today - firstDay
+
+  let lastForm = sortedForms[sortedForms.length - 1];
+  console.log("Последняя форма:", lastForm.date);
+
+  const lastDay = new Date(lastForm.date + "T00:00:00");
+
+  if (lastDay.getTime() === today.getTime()) {
+    console.log("Сегодня - последняя запись");
+    // return;
+  }
+
+  const existingDates = new Set();
+  for (let i = 0; i < formsArray.length; i++) {
+    existingDates.add(formsArray[i].date);
+  }
+  console.log("Существующие даты в Set:", Array.from(existingDates));
+
+  const missedDays = [];
+
+  let currentDate = new Date(lastDay);
+  // currentDate.setDate(currentDate.getDate() + 1);
+  currentDate.setHours(0, 0, 0, 0); // Обнуляем время для точного сравнения
+
+  // console.log(currentDate.getTime() === today.getTime())
+  if (currentDate.getTime() === today.getTime()) {
+    if(difFirstDayAndToday ===  86400000 ){
+      currentDate.setDate(today.getDate() - 1);
+      console.loп('Вариант 1')
+    }    
+    if(difFirstDayAndToday ===  172800000  ){
+      currentDate.setDate(today.getDate() - 2);
+      console.loп('Вариант 2')
+    }    
+    if(difFirstDayAndToday ===   259200000  ){
+      currentDate.setDate(today.getDate() - 3);
+      console.loп('Вариант 3')
+    }    
+  } else {
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  function formatDateLocal(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  console.log("lastDay:", lastDay);
+  console.log("currentDate:", currentDate);
+  console.log("yesterday:", yesterday);
+  console.log("today:", today);
+
+  // 6. Исправлено: используем локальное форматирование
+  console.log("Начинаем поиск с даты:", formatDateLocal(currentDate));
+
+  // 7. Исправлено: цикл поиска пропущенных дней
+  while (currentDate <= yesterday) {
+    const dateStr = formatDateLocal(currentDate);
+
+    if (!existingDates.has(dateStr)) {
+      // missedDays.push(dateStr);
+      console.log("Пропущенный день:", dateStr);
+    }
+
+    const day = currentDate.getDate().toString().padStart(2, "0");
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+    const year = currentDate.getFullYear();
+    // currentDate.setDate(currentDate.getDate() + 1);
+
+    const newForm = {
+      date: dateStr,
+      dateForm: `${day}.${month}.${year}`,
+      id: `auto-${Date.now()}-${Math.random()}`,
+      intensity: "",
+      headacheToday: "no",
+      aura: "",
+      location: [],
+      headacheType: [],
+      physicalActivity: "",
+      nausea: "",
+      vomiting: "",
+      lightSensitivity: "",
+      soundSensitivity: "",
+      medication: "",
+      drugName: "",
+      drugMass: "",
+      drugEffect: "",
+      isAutoGenerated: true, // Помечаем как автоматически созданную
+    };
+    currentDate.setDate(currentDate.getDate() + 1);
+    missedDays.push(newForm);
+  }
+
+  console.log("Все пропущенные дни:", missedDays);
+
+  if (missedDays.length === 0) {
+    console.log("Пропущенных дат нет");
+    return;
+  }
+
+  for (let i = 0; i < missedDays.length; i++) {
+    formsArray.push(missedDays[i]);
+  }
+
+  formsArray.sort(function (a, b) {
+    return new Date(a.date).getTime() - new Date(b.date).getTime();
+  });
+
+  console.log(formsArray);
+  // return formsArray;
+
+  localStorage.setItem("allForms", JSON.stringify(formsArray));
+  console.log("пропущенные даты сохранены в localStorage");
+
+  if (typeof allForms !== "undefined") {
+    // Если allForms - это ref() в Vue
+    if (allForms.value !== undefined) {
+      allForms.value = formsArray;
+      console.log("Обновлена реактивная переменная allForms");
+    } else {
+      allForms = formsArray;
+    }
+  }
+  if (props.updateCount) {
+    props.updateCount(); // Эта функция уже передается из App.vue
+  }
+  //  return formsArray;
 }
 
 function submitForm() {
@@ -251,6 +439,17 @@ function submitForm() {
       isFormSaved.value = false;
     }, 2000);
   }
+
+  localStorage.setItem("allForms", JSON.stringify(allForms.value));
+    
+    const updatedForms = missedDay();
+    if (updatedForms) {
+      allForms.value = updatedForms; 
+    }
+    
+    if (props.updateCount) {
+      props.updateCount();
+    }
 }
 
 const setCurrentDate = () => {
@@ -723,7 +922,6 @@ const last30Forms = computed(() => {
   gap: 10px;
 }
 
-
 .form-card.has-headache {
   border-left-color: var(--pink-accent-1);
   background-color: var(--soft-pink);
@@ -863,7 +1061,6 @@ const last30Forms = computed(() => {
   background-color: var(--dark-mint);
 }
 
-
 /* Форма для ввода данных */
 .card {
   background-color: var(--white);
@@ -1000,7 +1197,6 @@ div[v-if="form.medication === 'yes'"] {
   color: var(--pink-accent-1);
   text-decoration: underline;
 }
-
 
 .dark-theme .eye,
 .dark-theme .trash {
