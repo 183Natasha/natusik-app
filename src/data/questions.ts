@@ -1,6 +1,7 @@
+import { Question } from "./types";
 
 
-export const basicQuestions: object[] = [
+export const basicQuestions: Question[] = [
     // {
     //   id: 1,
     //   type: "text",
@@ -29,7 +30,7 @@ export const basicQuestions: object[] = [
     },
 ];
 
-export const headacheQuestions: object[] = [
+export const headacheQuestions: Question[] = [
     {
         id: 4,
         type: "radio",
@@ -147,7 +148,7 @@ export const headacheQuestions: object[] = [
     },
 ];
 
-export const drugQuestions: object[] = [
+export const drugQuestions: Question[] = [
     {
         id: 14,
         type: "text",
