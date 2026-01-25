@@ -1,0 +1,9 @@
+{
+    "vueCompilerOptions": {
+        "target": 3,
+        "strictTemplates": true,
+        "plugins": [
+            "@volar/vue-language-plugin-pug"
+        ]
+    }
+}
