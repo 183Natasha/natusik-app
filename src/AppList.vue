@@ -213,15 +213,15 @@ function deleteForm(formId) {
   }
 }
 
-function  missedDay() {
+function  missedDay(formsArray) {
   // 1. Исправлено: используем локальное время для today
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  let savedForms = localStorage.getItem("allForms");
-  if (!savedForms) return;
-  let formsArray = JSON.parse(savedForms);
-  console.log(formsArray);
+  // let savedForms = localStorage.getItem("allForms");
+  // if (!savedForms) return;
+  // let formsArray = JSON.parse(savedForms);
+  // console.log(formsArray);
 
   let allDays = [];
   formsArray.forEach((el) => {
@@ -377,13 +377,43 @@ function  missedDay() {
   //  return formsArray;
 }
 
+function hasNoteOfThisDay (savedForms, formsArray, formData) {
+  if (savedForms) {
+    // const formsArray = JSON.parse(savedForms);
+    if (Array.isArray(formsArray)) {
+      const existingEntry = formsArray.find(
+        (item) => item.date === formData.date
+      );
+
+      if (existingEntry) {
+        alert(
+          `Дневник за ${new Date(form.date).toLocaleDateString(
+            "ru"
+          )} уже создан!`
+        );
+        return;
+      }
+      allForms.value.push(formData);
+    } else {
+      allForms.value = [formData];
+    }
+  } else {
+    allForms.value = [formData];
+  }
+}
+
 function submitForm() {
+  let savedForms = localStorage.getItem("allForms");
+  
+  let formsArray = JSON.parse(savedForms);
+
   if (formIsValid()) {
     const formData = {
       id: Date.now() + "-" + Math.random(), // Генерируем новый уникальный ID при каждой отправке
-      dateForm: new Date().toLocaleDateString(), // Форматируем дату для читаемости
+      dateForm: new Date().toLocaleDateString(), // День создания заметки. Форматируем дату для читаемости
+      
       // name: form.name,
-      date: form.date,
+      date: form.date, //Дата, за какой день сохранют заметку
       intensity: form.intensity,
       headacheToday: form.headacheToday,
       aura: form.aura,
@@ -400,31 +430,9 @@ function submitForm() {
       drugEffect: form.drugEffect,
     };
 
-    console.log("Form Data:", formData);
+    // console.log("Form Data:", formData);
 
-    const savedForms = localStorage.getItem("allForms");
-    if (savedForms) {
-      const formsArray = JSON.parse(savedForms);
-      if (Array.isArray(formsArray)) {
-        const existingEntry = formsArray.find(
-          (item) => item.date === formData.date
-        );
-
-        if (existingEntry) {
-          alert(
-            `Дневник за ${new Date(form.date).toLocaleDateString(
-              "ru"
-            )} уже создан!`
-          );
-          return;
-        }
-        allForms.value.push(formData);
-      } else {
-        allForms.value = [formData];
-      }
-    } else {
-      allForms.value = [formData];
-    }
+    hasNoteOfThisDay(savedForms, formsArray, formData) 
 
     localStorage.setItem("allForms", JSON.stringify(allForms.value));
     console.log("10. Сохранено в localStorage");
@@ -440,17 +448,7 @@ function submitForm() {
       isFormSaved.value = false;
     }, 2000);
   }
-
-  localStorage.setItem("allForms", JSON.stringify(allForms.value));
-    
-    const updatedForms = missedDay();
-    if (updatedForms) {
-      allForms.value = updatedForms; 
-    }
-    
-    if (props.updateCount) {
-      props.updateCount();
-    }
+  missedDay(formsArray);
 }
 
 const setCurrentDate = () => {
