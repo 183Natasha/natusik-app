@@ -4,6 +4,7 @@ import cranberryImage from "./assets/cranberry.png";
 import lemonImage from "./assets/lemon.svg";
 import AppList from "./AppList.vue";
 import AppSun from "./AppSun.vue";
+import AppWelcome from "./AppWelcome.vue";
 
 const getLocalStorageCount = () => {
   try {
@@ -190,10 +191,7 @@ const incrementCount = (formData) => {
       <AppSun />
     </header>
     <div v-if="hasReg === false">
-      <div class="welcomeCard">
-        
-
-      </div>
+      <AppWelcome></AppWelcome>
     </div>
     <div v-if="hasReg === true">
       <div >
