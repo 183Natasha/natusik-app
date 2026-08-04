@@ -80,7 +80,27 @@ let currentLogo = ref(cranberryImage);
 let isOpen = ref(true);
 // let headacheDays = ref(0);
 
+
 let hasReg = ref(false)
+
+
+onMounted(() => {
+  const savedHasReg = localStorage.getItem("hasReg");
+  if (savedHasReg === "true") {
+    hasReg.value = true;
+  }
+  
+  count.value = getLocalStorageCount();
+  loadStatisticsFromStorage();
+  updateDayText();
+  checkCount();
+});
+
+const finishWelcome = () => {
+  hasReg.value = true;
+  localStorage.setItem("hasReg", "true");
+};
+
 
 let count = ref(getLocalStorageCount()); // кол-во дней ведения дневника
 let day = ref("");
@@ -169,12 +189,12 @@ const updateDayText = () => {
   }
 };
 
-onMounted(() => {
-  count.value = getLocalStorageCount();
-  loadStatisticsFromStorage();
-  updateDayText();
-  checkCount();
-});
+// onMounted(() => {
+//   count.value = getLocalStorageCount();
+//   loadStatisticsFromStorage();
+//   updateDayText();
+//   checkCount();
+// });
 
 const incrementCount = (formData) => {
   checkCount();
@@ -191,7 +211,7 @@ const incrementCount = (formData) => {
       <AppSun />
     </header>
     <div v-if="hasReg === false">
-      <AppWelcome></AppWelcome>
+      <AppWelcome @finish="finishWelcome" />
     </div>
     <div v-if="hasReg === true">
       <div >

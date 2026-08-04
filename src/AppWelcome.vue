@@ -2,7 +2,18 @@
 import { ref } from 'vue'
 import { welcomePoints } from './data/welcometype';
 
+
 const counter = ref(1)
+
+const emit = defineEmits(['finish'])
+
+function nextSlide() {
+    if (counter.value < 5) {
+        counter.value++
+    } else {
+        emit('finish')
+    }
+}
 </script>
 
 <template>
@@ -13,13 +24,19 @@ const counter = ref(1)
                     <div class="card-number">{{ point.id }}</div>
                     <div class="card-title">{{ point.title }}</div>
                 </div>
+                <!-- <img :src-'currentPoint.image'/> -->
                 <div class="card-text">{{ point.text }}</div>
-                <button @click="counter++">
-                    Далее
+                <button @click="nextSlide">
+                    {{ counter === 5 ? 'Завершить' : 'Далее' }}
                 </button>
             </div>
         </template>
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.welcomeCard__title{
+    display: flex;
+    gap: 20px
+}
+</style>
