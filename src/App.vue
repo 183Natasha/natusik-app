@@ -79,6 +79,8 @@ let currentLogo = ref(cranberryImage);
 let isOpen = ref(true);
 // let headacheDays = ref(0);
 
+let hasReg = ref(false)
+
 let count = ref(getLocalStorageCount()); // кол-во дней ведения дневника
 let day = ref("");
 let daysDairy = ref(0); // из count ДНЕЙ ведения
@@ -187,8 +189,14 @@ const incrementCount = (formData) => {
       </div>
       <AppSun />
     </header>
-    <div>
-      <div>
+    <div v-if="hasReg === false">
+      <div class="welcomeCard">
+        
+
+      </div>
+    </div>
+    <div v-if="hasReg === true">
+      <div >
         Вы ведете данный дневник головной боли {{ count }} {{ day }}
         <button v-if="count > 0" class="btn" @click="isOpen = !isOpen">
           {{ isOpen ? "Показать статистику" : "Скрыть статистику" }}
