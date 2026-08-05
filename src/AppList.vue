@@ -626,11 +626,11 @@ const last30Forms = computed(() => {
       </template>
     </div>
 
-    <div>
+    <!-- <div>
       <button @click="useTest" class="btn-test">
         Использовать тестовые данные
       </button>
-    </div>
+    </div> -->
 
     <form class="card" @submit.prevent="submitForm">
       <h2>Список вопросов</h2>

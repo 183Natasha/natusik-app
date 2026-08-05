@@ -214,7 +214,7 @@ const incrementCount = (formData) => {
       <AppWelcome @finish="finishWelcome" />
     </div>
     <div v-if="hasReg === true">
-      <div >
+      <div class="stat">
         Вы ведете данный дневник головной боли {{ count }} {{ day }}
         <button v-if="count > 0" class="btn" @click="isOpen = !isOpen">
           {{ isOpen ? "Показать статистику" : "Скрыть статистику" }}
@@ -328,9 +328,13 @@ h1 {
 
 /* Первый div внутри основного контента */
 .app > div > div:first-child {
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 15px;
   color: var(--text-light);
+}
+
+.stat{
+  font-size: 16px;
 }
 
 /* Кнопка */
