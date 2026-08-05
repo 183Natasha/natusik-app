@@ -112,9 +112,177 @@ function nextSlide() {
 }
 
 
-/* .right-panel{
-    width: 500px;
-} */
+@media (max-width: 480px) {
+    .welcomeCard {
+        padding: 15px;
+        margin: 10px;
+        border-radius: 15px;
+    }
 
-/* .h2{} */
+    .welcomeCard__title {
+        font-size: 18px;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .card-number {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .card-title {
+        font-size: 18px;
+    }
+
+    .welcome__content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .left-panel {
+        flex: none;
+        max-width: 100%;
+        width: 100%;
+        height: 200px;
+    }
+
+    .right-panel {
+        width: 100%;
+    }
+
+    .card-text {
+        font-size: 14px;
+        line-height: 1.6;
+        min-height: 120px;
+        padding: 5px 0;
+        width: 300px;
+    }
+
+    .btn-container {
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px 30px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 280px;
+    }
+}
+
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .welcomeCard {
+        padding: 25px;
+        margin: 15px;
+    }
+
+    .welcomeCard__title {
+        font-size: 22px;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .card-number {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .card-title {
+        font-size: 22px;
+    }
+
+    .welcome__content {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .left-panel {
+        flex: none;
+        max-width: 100%;
+        width: 100%;
+        height: 250px;
+    }
+
+    .right-panel {
+        width: 100%;
+    }
+
+    .card-text {
+        font-size: 18px;
+        line-height: 1.7;
+        min-height: 100px;
+        width: 400px;
+    }
+
+    .btn-container {
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+    .btn {
+        padding: 12px 35px;
+        font-size: 16px;
+    }
+}
+
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .welcomeCard {
+        padding: 30px;
+        margin: 20px auto;
+        max-width: 90%;
+    }
+
+    .welcomeCard__title {
+        font-size: 24px;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .card-number {
+        width: 32px;
+        height: 32px;
+        font-size: 17px;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .welcome__content {
+        gap: 25px;
+    }
+
+    .left-panel {
+        flex: 0 0 40%;
+        max-width: 40%;
+        height: 300px;
+    }
+
+    .right-panel {
+        flex: 1;
+    }
+
+    .card-text {
+        font-size: 19px;
+        line-height: 1.8;
+        min-height: 150px;
+        width: 400px;
+    }
+
+    .btn-container {
+        justify-content: flex-end;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 35px;
+        font-size: 16px;
+    }
+}
+
 </style>
