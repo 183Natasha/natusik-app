@@ -803,6 +803,7 @@ const last30Forms = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-size: 16px;
 }
 
 .btn-clear:hover {
@@ -827,6 +828,7 @@ const last30Forms = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-size: 16px;
 }
 
 .btn-history:hover {
@@ -905,6 +907,7 @@ const last30Forms = computed(() => {
   padding: 30px;
   box-shadow: 0 4px 15px var(--shadow);
   border: 1px solid var(--border-color);
+  font-size: 20px;
 }
 
 .card h2 {
@@ -958,6 +961,7 @@ ol li:last-child {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
 
 /* Стили для условных блоков */
 div[v-if="form.headacheToday === 'yes'"],

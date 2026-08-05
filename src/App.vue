@@ -279,6 +279,7 @@ const incrementCount = (formData) => {
   min-height: 100vh;
   padding: 20px;
   line-height: 1.6;
+  font-size: 14px;
 }
 
 /* Header стили */
@@ -345,6 +346,7 @@ h1 {
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-block;
+  font-size: 16px;
 }
 
 .btn:hover {
