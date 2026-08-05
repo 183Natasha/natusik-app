@@ -3,8 +3,33 @@ import { ref } from 'vue'
 import { welcomePoints } from './data/welcometype';
 
 
-const counter = ref(1)
+import history from "./assets/welcome/history.png"
+import start from "./assets/welcome/start.jpeg"
+import stat from "./assets/welcome/stat.png"
+import darkTheme from "./assets/welcome/darkTheme.png"
+import step2 from "./assets/welcome/step2.jpeg"
 
+
+const welcomePointsWithImages = welcomePoints.map(point => {
+    if (point.id === 1) {
+        return { ...point, image: start }
+    }
+    if (point.id === 2) {
+        return { ...point, image: step2 }
+    }
+    if (point.id === 3) {
+        return { ...point, image: history }
+    }
+    if (point.id === 4) {
+        return { ...point, image: stat }
+    }
+    if (point.id === 5) {
+        return { ...point, image: darkTheme }
+    }
+    return point
+})
+
+const counter = ref(1)
 const emit = defineEmits(['finish'])
 
 function nextSlide() {
@@ -18,15 +43,15 @@ function nextSlide() {
 
 <template>
     <div class="welcomeCard">
-        <template v-for="point in welcomePoints" :key="point.id">
+        <template v-for="point in welcomePointsWithImages" :key="point.id">
             <div v-if="counter === point.id">
                 <div class="welcomeCard__title">
                     <div class="card-number">{{ point.id }}</div>
                     <h3 class="card-title">{{ point.title }}</h3>
                 </div>
                 <div class="welcome__content">
-                    <div class="left-panel">
-                        <img class="welcome-image" :src='point.image' />
+                    <div class="left-panel" v-if="point.image">
+                        <img class="welcome-image" :src='point.image' :alt="point.title" />
                     </div>
 
                     <div class="right-panel">
@@ -37,17 +62,13 @@ function nextSlide() {
                             </button>
                         </div>
                     </div>
-
-
-
                 </div>
-
-
             </div>
-
         </template>
     </div>
 </template>
+
+
 
 <style scoped>
 .welcomeCard__title {
@@ -107,7 +128,8 @@ function nextSlide() {
 .welcome-image {
     width: 100%;
     height: 105%;
-    object-fit: contain; /* Сохраняет пропорции */
+    object-fit: contain;
+    /* Сохраняет пропорции */
     object-position: center;
 }
 
@@ -284,5 +306,4 @@ function nextSlide() {
         font-size: 16px;
     }
 }
-
 </style>

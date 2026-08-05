@@ -5,30 +5,30 @@ export const welcomePoints : Points [] = [
         id : 1,
         title: 'Что это за приложение',
         text:  "- Дневник головной боли — это инструмент для пациентов с мигренью.\n - Заполняйте форму после каждого приступа, а мы покажем статистику и поможем подготовиться к приёму врача.",
-        image: '/public/welcome/start.jpeg'
+        image: '/src/assets/welcome/start.jpeg'
     },
     {
         id: 2,
         title: 'Что нужно делать',
         text: "- Отвечайте на вопросы. \n - Если приступа нет — вы увидите короткий блок о вашем самочувствии. \n - Если есть головная боль — откроются уточняющие вопросы",
-        image: '/public/welcome/step2.jpeg'
+        image: '/src/assets/welcome/step2.jpeg'
     },
     {
         id: 3,
         title: 'История заметок',
         text: "- Все записи сохраняются автоматически. \n - Вы можете просмотреть их по датам, возможо редактирование.",
-        image: '/public/welcome/history.png'
+        image: '/src/assets/welcome/history.png'
     },
     {
         id: 4,
         title: 'Статистика',
         text: " - Автоматический анализ за 30 дней: частота приступов, интенсивность и принятые препараты. \n - При частоте приступов более 15 в неделю приложение уведомит Вас о необходимости консультации врача",
-        image: '/public/welcome/stat.png'
+        image: '/src/assets/welcome/stat.png'
     },
     {
         id: 5,
         title: 'Темная тема',
         text: "- Тема переключается кнопкой в правом углу экрана — для комфортной работы при любом освещении.",
-        image: '/public/welcome/darkTheme.png'
+        image: '/src/assets/welcome/darkTheme.png'
     },
 ]
