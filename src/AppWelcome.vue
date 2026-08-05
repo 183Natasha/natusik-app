@@ -54,6 +54,8 @@ function nextSlide() {
     display: flex;
     gap: 20px;
     align-items: center;
+    font-size: 25px;
+
 }
 
 /* .welcomeCard {
@@ -79,6 +81,7 @@ function nextSlide() {
 .card-text {
     height: 250px;
     width: 600px;
+    font-size: 20px;
     /* margin-left: 50px; */
 }
 
